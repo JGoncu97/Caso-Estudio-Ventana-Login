@@ -10,6 +10,7 @@ public class Logica {
 	final int SELECCION=0;
 	final int ADMINISTRADOR=1;
 	final int USUARIO=2;
+	final int SECRETARIA=3;
 	
 //	final String PASS_ADMIN="admin";
 //	final String PASS_USER="1234";
@@ -41,7 +42,7 @@ public class Logica {
 
 			if (miUsuarioVo!=null) {
 				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() )) {
-					if (pass.equals(miUsuarioVo.getDocumento()) ||user.equals(miUsuarioVo.getNombre())) {
+					if (pass.equals(miUsuarioVo.getPassword()) && user.equals(miUsuarioVo.getUsername())) {
 						retorno=miUsuarioVo.getNombre();
 					}else{
 						retorno="invalido";

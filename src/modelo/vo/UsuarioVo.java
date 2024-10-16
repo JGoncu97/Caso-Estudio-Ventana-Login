@@ -2,6 +2,9 @@ package modelo.vo;
 
 public class UsuarioVo {
 	
+	private String username;
+	private String password;
+	
 	private String nombre;
 	private String documento;
 	private String profesion;
@@ -9,6 +12,9 @@ public class UsuarioVo {
 	private String direccion;
 	private String telefono;
 	private int tipo;
+	
+	private int estado = 1;
+	
 	
 	public String getNombre() {
 		return nombre;
@@ -51,6 +57,25 @@ public class UsuarioVo {
 	}
 	public void setTipo(int tipo) {
 		this.tipo = tipo;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public int getEstado() {
+		return estado;
+	}
+	public void setEstado(int estado) {
+		this.estado = estado;
 	}
 	
 }

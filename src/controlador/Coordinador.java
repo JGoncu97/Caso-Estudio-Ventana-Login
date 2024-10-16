@@ -79,10 +79,11 @@ public class Coordinador {
 		// TODO Auto-generated method stub
 		return miLogica.validarEdad(edadIngresada);
 	}
-
-	public UsuarioVo consultarUsuario(String doc) {
 		
-		return miUsuarioDao.consultarUsuario(doc);
+	//Modificamos el argumento para enviar la password
+	public UsuarioVo consultarUsuario(String pass) {
+		
+		return miUsuarioDao.consultarUsuario(pass);
 	}
 
 	public String actualizaUsuario(UsuarioVo miUsuarioVo) {

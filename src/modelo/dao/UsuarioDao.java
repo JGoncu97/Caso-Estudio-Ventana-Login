@@ -56,8 +56,8 @@ public class UsuarioDao {
 		   
 		return resultado;
 	}
-
-	public UsuarioVo consultarUsuario(String doc) {
+	//Modificamos el argumento para recibir la pass en vez del doc
+	public UsuarioVo consultarUsuario(String pass) {
 		Connection connection=null;
 		Conexion miConexion=new Conexion();
 		PreparedStatement statement=null;
@@ -66,19 +66,21 @@ public class UsuarioDao {
 		UsuarioVo miUsuario=new UsuarioVo();
 		
 		connection=miConexion.getConnection();
-		
-		String consulta="SELECT * FROM usuario where documento = ?";
+		//Cambiamos la consulta SQL para validar la existencia del password y mandar el usuario
+		String consulta="SELECT * FROM usuario where password = ?";
 		ArrayList<UsuarioVo> listUser=new ArrayList<UsuarioVo>();
 		try {
 			if (connection!=null) {
 				statement=connection.prepareStatement(consulta);
-				statement.setString(1, doc);
+				statement.setString(1, pass);
 				
 				result=statement.executeQuery();
 				
 				while(result.next()==true){
 					miUsuario=new UsuarioVo();
 					miUsuario.setDocumento(result.getString("documento"));
+					miUsuario.setUsername(result.getString("username"));
+					miUsuario.setPassword(result.getString("password"));
 					miUsuario.setNombre(result.getString("nombre"));
 					miUsuario.setProfesion(result.getString("profesion"));
 					miUsuario.setEdad(result.getInt("edad"));

@@ -22,13 +22,15 @@ public class VentanaLogin extends JDialog implements ActionListener{
     private javax.swing.JComboBox comboUsuarios;
     //Agregar etiqueta nombre usuario
     private javax.swing.JLabel nombreUser;
+    private javax.swing.JTextField campoUser;
+    
     private javax.swing.JLabel imagen;
     private javax.swing.JLabel labelPass;
     private javax.swing.JLabel labelUser;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JLabel tituloLogin;
     //Agregamos input para escribir el username
-    private javax.swing.JTextField campoUser;
+    
     
     private Coordinador miCoordinador;
     // End of variables declaration  
