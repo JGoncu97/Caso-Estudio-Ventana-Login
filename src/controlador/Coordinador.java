@@ -28,9 +28,10 @@ public class Coordinador {
 	public void setLogica(Logica miLogica) {
 		this.miLogica=miLogica;
 	}
-
-	public String validarIngreso(int index, String pass) {		
-		return miLogica.validarIngreso(index,pass);
+	
+	//Modificacion para recibir un nombre de usuario
+	public String validarIngreso(int index,String user ,String pass) {		
+		return miLogica.validarIngreso(index,user,pass);
 	}
 
 	public void cerrarVentanaLogin() {

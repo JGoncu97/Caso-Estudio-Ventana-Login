@@ -21,26 +21,27 @@ public class Logica {
 			this.miCoordinador=miCoordinador;
 		}
 		
-		public String validarIngreso(int index, String pass){
+		public String validarIngreso(int index, String user,String pass){
 			
 			String retorno="";
 			
 			if (index==SELECCION) {//seleccion es 1
 				retorno="error";
 			}else{
-				retorno=validarPass(index, pass);
+				retorno=validarPass(index, user,pass);
 			}
 				
 			return retorno;
 		}
-
-		private String validarPass(int index, String pass) {
+		
+		//Agregamos el user name a la validacion
+		private String validarPass(int index, String user,String pass) {
 			UsuarioVo miUsuarioVo=miCoordinador.consultarUsuario(pass);
 			String retorno="";
 
 			if (miUsuarioVo!=null) {
 				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() )) {
-					if (pass.equals(miUsuarioVo.getDocumento())) {
+					if (pass.equals(miUsuarioVo.getDocumento()) ||user.equals(miUsuarioVo.getNombre())) {
 						retorno=miUsuarioVo.getNombre();
 					}else{
 						retorno="invalido";
