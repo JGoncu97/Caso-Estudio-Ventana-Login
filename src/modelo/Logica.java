@@ -41,7 +41,7 @@ public class Logica {
 			String retorno="";
 
 			if (miUsuarioVo!=null) {
-				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() )) {
+				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() ) || (index==SECRETARIA && index==miUsuarioVo.getTipo() )) {
 					if (pass.equals(miUsuarioVo.getPassword()) && user.equals(miUsuarioVo.getUsername())) {
 						retorno=miUsuarioVo.getNombre();
 					}else{
