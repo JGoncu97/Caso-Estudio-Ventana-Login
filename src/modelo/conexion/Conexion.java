@@ -8,7 +8,7 @@ public class Conexion {
 	private String nombreBd="usuario_bd";
 	private String usuario="root";
 	private String password="";
-	private String url="jdbc:mysql://localhost/"+nombreBd;
+	private String url="jdbc:mysql://localhost:3307/usuario_bd" ;
 
 	Connection conn=null;
 	//constructor de la clase

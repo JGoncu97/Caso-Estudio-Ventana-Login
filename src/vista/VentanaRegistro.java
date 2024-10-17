@@ -64,7 +64,7 @@ public class VentanaRegistro extends JDialog  implements ActionListener{
 
         labelProfesion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         labelProfesion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelProfesion.setText("Profesión:");
+        labelProfesion.setText("Profesiï¿½n:");
         panelRegistro.add(labelProfesion);
         labelProfesion.setBounds(0, 170, 90, 20);
 
@@ -94,7 +94,7 @@ public class VentanaRegistro extends JDialog  implements ActionListener{
 
         LabelDireccion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         LabelDireccion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        LabelDireccion.setText("Dirección:");
+        LabelDireccion.setText("Direcciï¿½n:");
         panelRegistro.add(LabelDireccion);
         LabelDireccion.setBounds(0, 200, 90, 20);
 
@@ -198,8 +198,11 @@ public class VentanaRegistro extends JDialog  implements ActionListener{
 			}
 			
 			if (retorno.equals("ok")) {
-				JOptionPane.showMessageDialog(null, "El usuario fue registrado con exito!!!");
-			}else{
+
+                JOptionPane.showMessageDialog(null, "El usuario fue registrado con exito!!!");
+                // AquÃ­ llamas al mÃ©todo para limpiar los campos
+                limpiarCampos();
+            }else{
 				if (retorno.equals("error")) {
 					JOptionPane.showMessageDialog(null, "El usuario no pudo ser registrado, verifique la traza del error!!!");	
 				}else{
@@ -214,4 +217,15 @@ public class VentanaRegistro extends JDialog  implements ActionListener{
 		
 	}
 
+    private void limpiarCampos() {
+        campoDocumento.setText("");
+        campoNombre.setText("");
+        campoProfesion.setText("");
+        campoEdad.setText("");
+        campoDireccion.setText("");
+        campoTelefono.setText("");
+    }
+
 }
+
+
