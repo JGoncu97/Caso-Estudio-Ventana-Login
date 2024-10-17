@@ -93,5 +93,10 @@ public class Coordinador {
 	public String eliminarUsuario(String documento) {
 		return miUsuarioDao.eliminarUsuario(documento);
 	}
+
+	public void abrirVentanaPrincipal() {
+		miVentana.setVisible(true);
+		
+	}
 	
 }

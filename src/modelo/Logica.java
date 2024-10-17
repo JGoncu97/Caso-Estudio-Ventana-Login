@@ -44,6 +44,7 @@ public class Logica {
 				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() ) || (index==SECRETARIA && index==miUsuarioVo.getTipo() )) {
 					if (pass.equals(miUsuarioVo.getPassword()) && user.equals(miUsuarioVo.getUsername())) {
 						retorno=miUsuarioVo.getNombre();
+						miCoordinador.abrirVentanaPrincipal();
 					}else{
 						retorno="invalido";
 					}

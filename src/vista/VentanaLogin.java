@@ -158,6 +158,7 @@ public class VentanaLogin extends JDialog implements ActionListener{
 		if (evento.getSource()==botonAceptar) {
 			String resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoUser.getText(),campoPass.getText());
 			System.out.println(resp);
+			
 			if (resp.equals("error")) {
 				JOptionPane.showMessageDialog(null, "No ha seleccionado un usuario","Advertencia",JOptionPane.WARNING_MESSAGE);
 			}else{

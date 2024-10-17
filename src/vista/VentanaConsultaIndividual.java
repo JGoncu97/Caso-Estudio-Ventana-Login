@@ -35,7 +35,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
     public VentanaConsultaIndividual(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setSize(710,330);
+        setSize(710,420);
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -85,7 +85,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
         labelProfesion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         labelProfesion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelProfesion.setText("Profesión:");
+        labelProfesion.setText("Profesion:");
         panelConsulta.add(labelProfesion);
         labelProfesion.setBounds(0, 170, 90, 20);
 
@@ -115,7 +115,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
         LabelDireccion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         LabelDireccion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        LabelDireccion.setText("Dirección:");
+        LabelDireccion.setText("Direccion:");
         panelConsulta.add(LabelDireccion);
         LabelDireccion.setBounds(0, 200, 90, 20);
 
@@ -171,7 +171,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         campoDocumento.setBounds(510, 140, 170, 20);
 
         getContentPane().add(panelConsulta);
-        panelConsulta.setBounds(0, 0, 710, 310);
+        panelConsulta.setBounds(0, 0, 710, 420);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -253,7 +253,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 			String actualiza="";
 			//se llama al metodo validarCampos(), este retorna true o false, dependiendo de eso ingresa a una de las opciones
 			if (miCoordinador.validarCampos(miUsuarioVo)) {
-				//si se retornó true es porque todo está correcto y se llama a actualizar
+				//si se retornï¿½ true es porque todo estï¿½ correcto y se llama a actualizar
 				actualiza=miCoordinador.actualizaUsuario(miUsuarioVo);//en registro se almacena ok o error, dependiendo de lo que retorne el metodo
 			}else{
 				actualiza="mas_datos";//si validarCampos() retorna false, entonces se guarda la palabra mas_datos para indicar que hace falta diligenciar los campos obligatorios
@@ -261,7 +261,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 			
 			//si el registro es exitoso muestra un mensaje en pantalla, sino, se valida si necesita mas datos o hay algun error
 			if (actualiza.equals("ok")) {
-				JOptionPane.showMessageDialog(null, " Se ha Modificado Correctamente ","Confirmación",JOptionPane.INFORMATION_MESSAGE);			
+				JOptionPane.showMessageDialog(null, " Se ha Modificado Correctamente ","Confirmaciï¿½n",JOptionPane.INFORMATION_MESSAGE);			
 			}else{
 				if (actualiza.equals("mas_datos")) {
 					JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios","Faltan Datos",JOptionPane.WARNING_MESSAGE);			
@@ -288,14 +288,14 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 		    	  
 					if (elimina.equals("ok")) {
 						JOptionPane.showMessageDialog(null, " Se ha Eliminado" +
-			            		" Correctamente","Información",JOptionPane.INFORMATION_MESSAGE);	
+			            		" Correctamente","Informaciï¿½n",JOptionPane.INFORMATION_MESSAGE);	
 						limpiarVentana();
 					}else{
-						JOptionPane.showMessageDialog(null, "No se pudo eliminar ","Información",JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "No se pudo eliminar ","Informaciï¿½n",JOptionPane.WARNING_MESSAGE);
 					}
 					
 				}else{
-					JOptionPane.showMessageDialog(null, "Ingrese un documento ","Información",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Ingrese un documento ","Informaciï¿½n",JOptionPane.WARNING_MESSAGE);
 				}
  
 		      }
