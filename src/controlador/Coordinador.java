@@ -40,6 +40,7 @@ public class Coordinador {
 
 	public void asignarPrivilegios(String usuario) {
 		miVentana.asignarPrivilegios(usuario);
+		miVentanaConsultaIndividual.asignarPrivilegios(usuario);
 	}
 
 	public void mostrarLogin() {

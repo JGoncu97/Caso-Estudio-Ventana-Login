@@ -200,7 +200,22 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
         pack();
     }
-
+    	
+    public void asignarPrivilegios(String usuario) {
+		
+		
+		if (usuario.equals("Administrador")) {
+			comboUsuarios.setVisible(true);
+			labelTipo.setVisible(true);
+		}else if(usuario.equals("Usuario")){
+			comboUsuarios.setVisible(false);
+			labelTipo.setVisible(false);
+		}else if(usuario.equals("Secretaria")) {
+			comboUsuarios.setVisible(false);
+			labelTipo.setVisible(false);
+		}
+		
+	}
  
 	public void setCoordinador(Coordinador miCoordinador) {
 		this.miCoordinador=miCoordinador;
