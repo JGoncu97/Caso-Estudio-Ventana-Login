@@ -24,6 +24,8 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
     private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar;
     private JTextField campoTelefono,campoDireccion,campoConsultaDocumento, campoDocumento,campoEdad,campoNombre,campoProfesion;
     private javax.swing.JPanel panelConsulta;
+    private javax.swing.JComboBox comboUsuarios;
+    private JLabel labelTipo;
     
     private javax.swing.JSeparator separadorInferior,separadorSuperior;
     
@@ -69,6 +71,8 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         btonCancelar = new javax.swing.JButton();
         btonConsultar = new javax.swing.JButton();
         campoDocumento = new javax.swing.JTextField();
+        comboUsuarios = new javax.swing.JComboBox();
+        labelTipo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         //getContentPane().setLayout(null);
@@ -124,22 +128,43 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         labelNombre.setText("*Nombre:");
         panelConsulta.add(labelNombre);
         labelNombre.setBounds(0, 140, 90, 20);
+        
+        
+        labelTipo.setFont(new java.awt.Font("Verdana", 0, 12));
+        labelTipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTipo.setText("Tipo");
+        panelConsulta.add(labelTipo);
+        labelTipo.setBounds(0, 230, 90, 20);
+        
+        comboUsuarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Administrador", "Usuario","Secretaria"}));
+        panelConsulta.add(comboUsuarios);
+        comboUsuarios.setBounds(100, 230, 190, 20);
+        comboUsuarios.addActionListener(this);
+        
         panelConsulta.add(separadorInferior);
-        separadorInferior.setBounds(20, 240, 660, 10);
+        separadorInferior.setBounds(20, 260, 660, 10);
+        
         panelConsulta.add(campoNombre);
         campoNombre.setBounds(100, 140, 300, 20);
+        
         panelConsulta.add(campoDireccion);
         campoDireccion.setBounds(100, 200, 300, 20);
+        
         panelConsulta.add(campoTelefono);
         campoTelefono.setBounds(510, 200, 170, 20);
+        
         panelConsulta.add(campoProfesion);
         campoProfesion.setBounds(100, 170, 300, 20);
+        
         panelConsulta.add(campoConsultaDocumento);
         campoConsultaDocumento.setBounds(390, 90, 120, 20);
+        
         panelConsulta.add(campoEdad);
         campoEdad.setBounds(510, 170, 170, 20);
+        
         panelConsulta.add(separadorSuperior);
         separadorSuperior.setBounds(20, 120, 660, 10);
+        
         btonActualizar = new javax.swing.JButton();
         btonEliminar = new javax.swing.JButton();
 
@@ -174,7 +199,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         panelConsulta.setBounds(0, 0, 710, 420);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
  
 	public void setCoordinador(Coordinador miCoordinador) {
