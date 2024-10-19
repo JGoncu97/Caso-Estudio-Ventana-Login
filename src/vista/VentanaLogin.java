@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import controlador.Coordinador;
+import modelo.vo.UsuarioVo;
 
 /**
  *
@@ -156,7 +157,7 @@ public class VentanaLogin extends JDialog implements ActionListener{
 		}
 		
 		if (evento.getSource()==botonAceptar) {
-			String resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoUser.getText(),campoPass.getText());
+			UsuarioVo resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoUser.getText(),campoPass.getText());
 			System.out.println(resp);
 			
 			if (resp.equals("error")) {
@@ -170,7 +171,7 @@ public class VentanaLogin extends JDialog implements ActionListener{
 								+ "verifique que se encuentre el linea","Error de Conexion",JOptionPane.ERROR_MESSAGE);
 					}else{
 						miCoordinador.asignarPrivilegios(resp);
-						miCoordinador.cerrarVentanaLogin();
+						
 					}
 				}
 			}

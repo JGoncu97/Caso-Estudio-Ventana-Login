@@ -16,6 +16,8 @@ public class Coordinador {
 	private VentanaRegistro miVentanaRegistro;
 	private VentanaConsultaIndividual miVentanaConsultaIndividual;
 	private UsuarioDao miUsuarioDao;
+	
+	private UsuarioVo usuarioActual;
 
 	public void setVentanaPrincipal(VentanaPrincipal miVentana) {
 		this.miVentana=miVentana;
@@ -30,7 +32,7 @@ public class Coordinador {
 	}
 	
 	//Modificacion para recibir un nombre de usuario
-	public String validarIngreso(int index,String user ,String pass) {		
+	public UsuarioVo validarIngreso(int index,String user ,String pass) {		
 		return miLogica.validarIngreso(index,user,pass);
 	}
 
@@ -38,8 +40,10 @@ public class Coordinador {
 		miLogin.dispose();
 	}
 
-	public void asignarPrivilegios(String usuario) {
+	public void asignarPrivilegios(UsuarioVo usuario) {
 		miVentana.asignarPrivilegios(usuario);
+		miVentanaConsultaIndividual.asignarPrivilegios(usuario);
+		
 	}
 
 	public void mostrarLogin() {
@@ -86,17 +90,26 @@ public class Coordinador {
 		return miUsuarioDao.consultarUsuario(pass);
 	}
 
-	public String actualizaUsuario(UsuarioVo miUsuarioVo) {
-		return miUsuarioDao.actualizaUsuario(miUsuarioVo);
+	public String actualizaUsuario(UsuarioVo miUsuarioVo, UsuarioVo usuarioActual) {
+		return miUsuarioDao.actualizaUsuario(miUsuarioVo, usuarioActual);
 	}
 
 	public String eliminarUsuario(String documento) {
 		return miUsuarioDao.eliminarUsuario(documento);
 	}
 
-	public void abrirVentanaPrincipal() {
+	public void abrirVentanaPrincipal(UsuarioVo miUsuarioVo) {
+		this.usuarioActual = miUsuarioVo;
 		miVentana.setVisible(true);
 		
+	}
+	
+	 public UsuarioVo obtenerUsuarioActual() {
+	        return usuarioActual;
+	    }
+
+	public UsuarioVo consultarUsuarioDoc(String doc) {
+		return miUsuarioDao.consultarUsuarioDoc(doc);
 	}
 	
 }

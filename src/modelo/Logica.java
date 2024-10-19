@@ -22,39 +22,42 @@ public class Logica {
 			this.miCoordinador=miCoordinador;
 		}
 		
-		public String validarIngreso(int index, String user,String pass){
+		public UsuarioVo validarIngreso(int index, String user,String pass){
 			
-			String retorno="";
+			UsuarioVo retorno=null;
 			
 			if (index==SELECCION) {//seleccion es 1
-				retorno="error";
+				JOptionPane.showInputDialog(null,"Por favor selecciona un tipo de usuario.");
 			}else{
 				retorno=validarPass(index, user,pass);
 			}
 				
+			
 			return retorno;
 		}
 		
 		//Agregamos el user name a la validacion
-		private String validarPass(int index, String user,String pass) {
+		private UsuarioVo validarPass(int index, String user,String pass) {
 			UsuarioVo miUsuarioVo=miCoordinador.consultarUsuario(pass);
-			String retorno="";
+			int retorno=0;
 
 			if (miUsuarioVo!=null) {
 				if ( (index==ADMINISTRADOR && index==miUsuarioVo.getTipo() )|| (index==USUARIO && index==miUsuarioVo.getTipo() ) || (index==SECRETARIA && index==miUsuarioVo.getTipo() )) {
 					if (pass.equals(miUsuarioVo.getPassword()) && user.equals(miUsuarioVo.getUsername())) {
-						retorno=miUsuarioVo.getNombre();
-						miCoordinador.abrirVentanaPrincipal();
+						miCoordinador.abrirVentanaPrincipal(miUsuarioVo);
+						miCoordinador.cerrarVentanaLogin();
+						return miUsuarioVo;
+						
 					}else{
-						retorno="invalido";
+						 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos");
 					}
 				}else{
-					retorno="invalido";
+					JOptionPane.showMessageDialog(null, "Tipo de usuario no coincide");
 				}
 			}else{
-				retorno="desconectado";
+				JOptionPane.showMessageDialog(null, "Usuario no encontrado");
 			}
-			   return retorno;
+			   return null;
 		}
 
 		public boolean validarCampos(UsuarioVo miUsuarioVo) {

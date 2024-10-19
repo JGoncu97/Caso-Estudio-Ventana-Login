@@ -2,6 +2,8 @@ package vista;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,6 +26,9 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
     private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar;
     private JTextField campoTelefono,campoDireccion,campoConsultaDocumento, campoDocumento,campoEdad,campoNombre,campoProfesion;
     private javax.swing.JPanel panelConsulta;
+    private javax.swing.JComboBox comboUsuarios;
+    private JLabel labelTipo;
+    private Map<String, Integer> tipoUsuariosMap;
     
     private javax.swing.JSeparator separadorInferior,separadorSuperior;
     
@@ -69,6 +74,8 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         btonCancelar = new javax.swing.JButton();
         btonConsultar = new javax.swing.JButton();
         campoDocumento = new javax.swing.JTextField();
+        comboUsuarios = new javax.swing.JComboBox();
+        labelTipo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         //getContentPane().setLayout(null);
@@ -124,22 +131,43 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         labelNombre.setText("*Nombre:");
         panelConsulta.add(labelNombre);
         labelNombre.setBounds(0, 140, 90, 20);
+        
+        
+        labelTipo.setFont(new java.awt.Font("Verdana", 0, 12));
+        labelTipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTipo.setText("Tipo");
+        panelConsulta.add(labelTipo);
+        labelTipo.setBounds(0, 230, 90, 20);
+        
+        comboUsuarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Administrador", "Usuario","Secretaria"}));
+        panelConsulta.add(comboUsuarios);
+        comboUsuarios.setBounds(100, 230, 190, 20);
+        comboUsuarios.addActionListener(this);
+        
         panelConsulta.add(separadorInferior);
-        separadorInferior.setBounds(20, 240, 660, 10);
+        separadorInferior.setBounds(20, 260, 660, 10);
+        
         panelConsulta.add(campoNombre);
         campoNombre.setBounds(100, 140, 300, 20);
+        
         panelConsulta.add(campoDireccion);
         campoDireccion.setBounds(100, 200, 300, 20);
+        
         panelConsulta.add(campoTelefono);
         campoTelefono.setBounds(510, 200, 170, 20);
+        
         panelConsulta.add(campoProfesion);
         campoProfesion.setBounds(100, 170, 300, 20);
+        
         panelConsulta.add(campoConsultaDocumento);
         campoConsultaDocumento.setBounds(390, 90, 120, 20);
+        
         panelConsulta.add(campoEdad);
         campoEdad.setBounds(510, 170, 170, 20);
+        
         panelConsulta.add(separadorSuperior);
         separadorSuperior.setBounds(20, 120, 660, 10);
+        
         btonActualizar = new javax.swing.JButton();
         btonEliminar = new javax.swing.JButton();
 
@@ -169,13 +197,46 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         
         panelConsulta.add(campoDocumento);
         campoDocumento.setBounds(510, 140, 170, 20);
+        
+        tipoUsuariosMap = new HashMap<>();
+        tipoUsuariosMap.put("Administrador", 1);
+        tipoUsuariosMap.put("Usuario", 2);
+        tipoUsuariosMap.put("Secretaria", 3);
 
         getContentPane().add(panelConsulta);
         panelConsulta.setBounds(0, 0, 710, 420);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
+    }
+    	
+    public void asignarPrivilegios(UsuarioVo usuario) {
+    	
+		for (String key : tipoUsuariosMap.keySet()) {
+	        if (tipoUsuariosMap.get(key).equals(usuario.getTipo())) {
+	            switch (key) {
+	                case "Administrador":
+	                	comboUsuarios.setVisible(true);
+	        			labelTipo.setVisible(true);
+	                    break;
+	                case "Usuario":
+	                	comboUsuarios.setVisible(false);
+	        			labelTipo.setVisible(false);
+	                    break;
+	                case "Secretaria":
+	                	comboUsuarios.setVisible(false);
+	        			labelTipo.setVisible(false);
+	        			break;
+	                default:
+	               
+	                    JOptionPane.showMessageDialog(this, "Tipo de usuario desconocido", "Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	            break; 
+	        }
+	    }
+            
+		
+		
+	}
  
 	public void setCoordinador(Coordinador miCoordinador) {
 		this.miCoordinador=miCoordinador;
@@ -213,7 +274,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 	}
 
 	private void consultarUsuario() {
-		UsuarioVo usuarioVO=miCoordinador.consultarUsuario(campoConsultaDocumento.getText().trim());
+		UsuarioVo usuarioVO=miCoordinador.consultarUsuarioDoc(campoConsultaDocumento.getText().trim());
 		
 		if (usuarioVO!=null) {
 			
@@ -223,6 +284,13 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 			campoDireccion.setText(usuarioVO.getDireccion());
 			campoTelefono.setText(usuarioVO.getTelefono());
 			campoEdad.setText(usuarioVO.getEdad()+"");
+			
+			for (String key : tipoUsuariosMap.keySet()) {
+	            if (tipoUsuariosMap.get(key).equals(usuarioVO.getTipo())) {
+	                comboUsuarios.setSelectedItem(key);
+	                break;
+	            }
+			}
 			
 		}else{
 			JOptionPane.showMessageDialog(null, "El usuario no se encuentra registrado en el sistema",
@@ -237,44 +305,77 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 	 */
 	private void actualizaUsuario() {
 		
-		Integer edad=miCoordinador.validarEdad(campoEdad.getText().trim());
-		
-		if (edad!=null) {
-			
-			UsuarioVo miUsuarioVo=new UsuarioVo();
-			//se asigna cada dato... el metodo trim() del final, permite eliminar espacios al inicio y al final, en caso de que se ingresen datos con espacio
-			miUsuarioVo.setDocumento(campoDocumento.getText().trim());
-			miUsuarioVo.setNombre(campoNombre.getText().trim());
-			miUsuarioVo.setEdad(Integer.parseInt(campoEdad.getText().trim()));
-			miUsuarioVo.setProfesion(campoProfesion.getText().trim());
-			miUsuarioVo.setTelefono(campoTelefono.getText().trim());
-			miUsuarioVo.setDireccion(campoDireccion.getText().trim());
-			
-			String actualiza="";
-			//se llama al metodo validarCampos(), este retorna true o false, dependiendo de eso ingresa a una de las opciones
-			if (miCoordinador.validarCampos(miUsuarioVo)) {
-				//si se retorn� true es porque todo est� correcto y se llama a actualizar
-				actualiza=miCoordinador.actualizaUsuario(miUsuarioVo);//en registro se almacena ok o error, dependiendo de lo que retorne el metodo
-			}else{
-				actualiza="mas_datos";//si validarCampos() retorna false, entonces se guarda la palabra mas_datos para indicar que hace falta diligenciar los campos obligatorios
-			}
-			
-			//si el registro es exitoso muestra un mensaje en pantalla, sino, se valida si necesita mas datos o hay algun error
-			if (actualiza.equals("ok")) {
-				JOptionPane.showMessageDialog(null, " Se ha Modificado Correctamente ","Confirmaci�n",JOptionPane.INFORMATION_MESSAGE);			
-			}else{
-				if (actualiza.equals("mas_datos")) {
-					JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios","Faltan Datos",JOptionPane.WARNING_MESSAGE);			
-				}else{
-		            JOptionPane.showMessageDialog(null, "Error al Modificar","Error",JOptionPane.ERROR_MESSAGE);
-				}
-			}					
-			
-		}else{
-			JOptionPane.showMessageDialog(null, "Debe ingresar una edad Valida!!!","Advertencia",JOptionPane.ERROR_MESSAGE);
-		}
+		Integer edad = miCoordinador.validarEdad(campoEdad.getText().trim());
+	    
+	    if (edad != null) {
+	        UsuarioVo usuarioActual = miCoordinador.obtenerUsuarioActual(); 
+	        
+	        if (usuarioActual.getTipo() == 1) { 
+	            UsuarioVo miUsuarioVo = new UsuarioVo();
+	            miUsuarioVo.setDocumento(campoDocumento.getText().trim());
+	            miUsuarioVo.setNombre(campoNombre.getText().trim());
+	            miUsuarioVo.setEdad(edad);
+	            miUsuarioVo.setProfesion(campoProfesion.getText().trim());
+	            miUsuarioVo.setTelefono(campoTelefono.getText().trim());
+	            miUsuarioVo.setDireccion(campoDireccion.getText().trim());
 
-				
+	         
+	            String tipoSeleccionado = comboUsuarios.getSelectedItem().toString();
+	            int tipoUsuario = tipoUsuariosMap.get(tipoSeleccionado); 
+	            
+	            System.out.println("Tipo seleccionado: " + tipoSeleccionado);
+	            System.out.println("Tipo mapeado: " + tipoUsuario);
+	            
+	            miUsuarioVo.setTipo(tipoUsuario);
+
+	            String actualiza = "";
+	            if (miCoordinador.validarCampos(miUsuarioVo)) {
+	                actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
+	            } else {
+	                actualiza = "mas_datos"; 
+	            }
+	            
+	            if (actualiza.equals("ok")) {
+	                JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);            
+	            } else {
+	                if (actualiza.equals("mas_datos")) {
+	                    JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);            
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
+	                }
+	            }
+	        } else if (usuarioActual.getTipo() != 1)  {
+	            UsuarioVo miUsuarioVo = new UsuarioVo();
+	            miUsuarioVo.setDocumento(campoDocumento.getText().trim());
+	            miUsuarioVo.setNombre(campoNombre.getText().trim());
+	            miUsuarioVo.setEdad(edad);
+	            miUsuarioVo.setProfesion(campoProfesion.getText().trim());
+	            miUsuarioVo.setTelefono(campoTelefono.getText().trim());
+	            miUsuarioVo.setDireccion(campoDireccion.getText().trim());
+	            
+	            String actualiza = "";
+	            if (miCoordinador.validarCampos(miUsuarioVo)) {
+	                actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
+	            } else {
+	                actualiza = "mas_datos"; // Indicador de falta de datos
+	            }
+	            
+	            if (actualiza.equals("ok")) {
+	                JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);            
+	            } else {
+	                if (actualiza.equals("mas_datos")) {
+	                    JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);            
+	                } else {
+	                    JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
+	                }
+	            }
+	            
+	        } else {
+	        	JOptionPane.showMessageDialog(null, "No tiene privilegios para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(null, "Debe ingresar una edad válida!!!", "Advertencia", JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 	
 	private void eliminaUsuario() {
