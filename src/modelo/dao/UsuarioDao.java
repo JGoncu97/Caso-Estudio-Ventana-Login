@@ -57,7 +57,7 @@ public class UsuarioDao {
 		return resultado;
 	}
 	//Modificamos el argumento para recibir la pass en vez del doc
-	public UsuarioVo consultarUsuario(String pass) {
+	public UsuarioVo consultarUsuario(String user,String pass) {
 		Connection connection=null;
 		Conexion miConexion=new Conexion();
 		PreparedStatement statement=null;
@@ -67,12 +67,13 @@ public class UsuarioDao {
 		
 		connection=miConexion.getConnection();
 		//Cambiamos la consulta SQL para validar la existencia del password y mandar el usuario
-		String consulta="SELECT * FROM usuario where password = ?";
+		String consulta="SELECT * FROM usuario where username = ? AND password = ?";
 		ArrayList<UsuarioVo> listUser=new ArrayList<UsuarioVo>();
 		try {
 			if (connection!=null) {
 				statement=connection.prepareStatement(consulta);
-				statement.setString(1, pass);
+				statement.setString(1, user);
+				statement.setString(2, pass);
 				
 				result=statement.executeQuery();
 				
@@ -219,7 +220,7 @@ public class UsuarioDao {
 		
 		String resp="";
 		try {
-			String sentencia="DELETE FROM usuario WHERE documento= ? ";
+			String sentencia="Update usuario SET tipo=4, estado = 0 WHERE documento = ? ";
 
 			PreparedStatement statement = connection.prepareStatement(sentencia);
 			statement.setString(1, documento);

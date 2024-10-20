@@ -85,9 +85,9 @@ public class Coordinador {
 	}
 		
 	//Modificamos el argumento para enviar la password
-	public UsuarioVo consultarUsuario(String pass) {
+	public UsuarioVo consultarUsuario(String user, String pass) {
 		
-		return miUsuarioDao.consultarUsuario(pass);
+		return miUsuarioDao.consultarUsuario(user,pass);
 	}
 
 	public String actualizaUsuario(UsuarioVo miUsuarioVo, UsuarioVo usuarioActual) {
