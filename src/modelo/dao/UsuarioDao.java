@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -151,8 +152,8 @@ public class UsuarioDao {
 		return miUsuario;
 	}
 
-	public String actualizaUsuario(UsuarioVo miUsuarioVo,UsuarioVo usuarioActual) {
-		 String resultado = "";
+	public UsuarioVo actualizaUsuario(UsuarioVo miUsuarioVo,UsuarioVo usuarioActual) {
+		 	UsuarioVo resultado = new UsuarioVo();
 		    Connection connection = null;
 		    PreparedStatement preStatement = null;
 		    Conexion miConexion = new Conexion();
@@ -174,7 +175,7 @@ public class UsuarioDao {
 		        } else {
 		           
 		            if (!usuarioActual.getDocumento().equals(miUsuarioVo.getDocumento())) {
-		                resultado= "error: no tienes permiso para actualizar los datos de otro usuario";
+		                resultado.setMensaje("error: no tienes permiso para actualizar los datos de otro usuario");
 		            }
 		            consulta = "UPDATE usuario SET documento= ?, nombre = ?, profesion=?, edad=?, direccion=?, telefono=? WHERE documento= ?";
 		            preStatement = connection.prepareStatement(consulta);
@@ -192,11 +193,11 @@ public class UsuarioDao {
 		     
 		        preStatement.executeUpdate();
 		        System.out.println(preStatement.toString());
-		        resultado = "ok";
+		        resultado.setMensaje("ok");
 
 		    } catch (SQLException e) {
 		        System.out.println("Error al actualizar el usuario: " + e.getMessage());
-		        resultado = "error";
+		        resultado.setMensaje("error");
 		    } finally {
 		     
 		        try {
@@ -236,6 +237,57 @@ public class UsuarioDao {
 			resp="error";
 		}
 		return resp;
+	}
+
+	public List<UsuarioVo> obtenerTodosLosUsuarios(UsuarioVo usuarioActual) {
+		List<UsuarioVo> listaUsuarios = new ArrayList<>();
+	    Connection connection = null;
+	    Conexion miConexion=new Conexion();
+	    PreparedStatement statement = null;
+	    ResultSet resultSet = null;
+
+	    String consulta;
+	    if (usuarioActual.getTipo() == 1) { 
+	        consulta = "SELECT * FROM usuario"; 
+	    } else {
+	        consulta = "SELECT * FROM usuario WHERE estado = 1"; 
+	    }
+
+
+	    try {
+	    	connection=miConexion.getConnection();
+	        statement = connection.prepareStatement(consulta);
+	        resultSet = statement.executeQuery();
+
+	        while (resultSet.next()) {
+	            UsuarioVo miUsuario = new UsuarioVo();
+	            miUsuario.setDocumento(resultSet.getString("documento"));
+	            miUsuario.setUsername(resultSet.getString("username"));
+	            miUsuario.setPassword(resultSet.getString("password"));
+	            miUsuario.setNombre(resultSet.getString("nombre"));
+	            miUsuario.setProfesion(resultSet.getString("profesion"));
+	            miUsuario.setEdad(resultSet.getInt("edad"));
+	            miUsuario.setDireccion(resultSet.getString("direccion"));
+	            miUsuario.setTelefono(resultSet.getString("telefono"));
+	            miUsuario.setTipo(resultSet.getInt("tipo"));
+	            listaUsuarios.add(miUsuario);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al obtener todos los usuarios: " + e.getMessage());
+	    } finally {
+	    	  try {
+		            if (statement != null) {
+		            	statement.close();
+		            }
+		            if (connection != null) {
+		                miConexion.desconectar();
+		            }
+		        } catch (SQLException e) {
+		            System.out.println("Error al cerrar recursos: " + e.getMessage());
+		        }
+	    }
+
+	    return listaUsuarios;
 	}
 	
 		

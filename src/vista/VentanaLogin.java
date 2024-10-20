@@ -158,15 +158,29 @@ public class VentanaLogin extends JDialog implements ActionListener{
 		
 		if (evento.getSource()==botonAceptar) {
 			UsuarioVo resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoUser.getText(),campoPass.getText());
-			System.out.println(resp);
 			
-			if (resp.getMensaje().equals("error")) {
+
+	        if (resp == null) {
+	          
+	            JOptionPane.showMessageDialog(null, "Error en la validación del usuario", "Error", JOptionPane.ERROR_MESSAGE);
+	            return; 
+	        }
+	        
+	        String mensaje = resp.getMensaje();
+	        
+	        if (mensaje == null) {
+	            
+	            return; 
+	        }
+			
+			
+			if (mensaje.equals("error")) {
 				JOptionPane.showMessageDialog(null, "No ha seleccionado un usuario","Advertencia",JOptionPane.WARNING_MESSAGE);
 			}else{
-				if (resp.getMensaje().equals("invalido")) {
+				if (mensaje.equals("invalido")) {
 					JOptionPane.showMessageDialog(null, "El pass no corresponde","Advertencia",JOptionPane.WARNING_MESSAGE);
 				}else{
-					if (resp.getMensaje().equals("desconectado")) {
+					if (mensaje.equals("desconectado")) {
 						JOptionPane.showMessageDialog(null, "No se pudo conectar a la BD, "
 								+ "verifique que se encuentre el linea","Error de Conexion",JOptionPane.ERROR_MESSAGE);
 					}else{

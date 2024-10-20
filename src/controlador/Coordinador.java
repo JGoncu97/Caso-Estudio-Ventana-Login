@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.List;
+
 import modelo.Logica;
 import modelo.dao.UsuarioDao;
 import modelo.vo.UsuarioVo;
@@ -90,7 +92,7 @@ public class Coordinador {
 		return miUsuarioDao.consultarUsuario(user,pass);
 	}
 
-	public String actualizaUsuario(UsuarioVo miUsuarioVo, UsuarioVo usuarioActual) {
+	public UsuarioVo actualizaUsuario(UsuarioVo miUsuarioVo, UsuarioVo usuarioActual) {
 		return miUsuarioDao.actualizaUsuario(miUsuarioVo, usuarioActual);
 	}
 
@@ -110,6 +112,10 @@ public class Coordinador {
 
 	public UsuarioVo consultarUsuarioDoc(String doc) {
 		return miUsuarioDao.consultarUsuarioDoc(doc);
+	}
+
+	public List<UsuarioVo> consultarTodosLosUsuarios(UsuarioVo usuarioActual) {
+		return miUsuarioDao.obtenerTodosLosUsuarios(usuarioActual);
 	}
 	
 }

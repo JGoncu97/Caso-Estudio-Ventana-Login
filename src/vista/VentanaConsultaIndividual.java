@@ -3,13 +3,16 @@ package vista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import modelo.vo.UsuarioVo;
 
@@ -23,14 +26,16 @@ import controlador.Coordinador;
 public class VentanaConsultaIndividual extends JDialog implements ActionListener{
 
     private JLabel LabelDireccion,TituloConsulta, labelDocumento,labelEdad, labelNombre, labelProfesion, labelTelefono,labelTexto;
-    private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar;
+    private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar,btonConsultarList;
     private JTextField campoTelefono,campoDireccion,campoConsultaDocumento, campoDocumento,campoEdad,campoNombre,campoProfesion;
     private javax.swing.JPanel panelConsulta;
     private javax.swing.JComboBox comboUsuarios;
     private JLabel labelTipo;
     private Map<String, Integer> tipoUsuariosMap;
-    
     private javax.swing.JSeparator separadorInferior,separadorSuperior;
+    
+    private javax.swing.JTable tablaUsuarios;
+    private javax.swing.JScrollPane scrollPaneUsuarios;
     
     private Coordinador miCoordinador;
 	
@@ -40,7 +45,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
     public VentanaConsultaIndividual(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setSize(710,420);
+        setSize(710,720);
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -76,6 +81,9 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         campoDocumento = new javax.swing.JTextField();
         comboUsuarios = new javax.swing.JComboBox();
         labelTipo = new javax.swing.JLabel();
+        btonConsultarList = new javax.swing.JButton();
+        tablaUsuarios= new javax.swing.JTable();
+    
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         //getContentPane().setLayout(null);
@@ -174,7 +182,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         btonCancelar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonCancelar.setText("Cancelar");
         panelConsulta.add(btonCancelar);
-        btonCancelar.setBounds(510, 260, 170, 30);
+        btonCancelar.setBounds(460, 260, 170, 30);
         btonCancelar.addActionListener(this);
 
         btonConsultar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -186,14 +194,20 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         btonActualizar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonActualizar.setText("Actualizar");
         panelConsulta.add(btonActualizar);
-        btonActualizar.setBounds(110, 260, 170, 30);
+        btonActualizar.setBounds(100, 260, 170, 30);
         btonActualizar.addActionListener(this);
         
         btonEliminar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonEliminar.setText("Eliminar");
         panelConsulta.add(btonEliminar);
-        btonEliminar.setBounds(310, 260, 170, 30);
+        btonEliminar.setBounds(280, 260, 170, 30);
         btonEliminar.addActionListener(this);
+        
+        btonConsultarList.setFont(new java.awt.Font("Verdana", 0, 14));
+        btonConsultarList.setText("Consultar Lista");
+        panelConsulta.add(btonConsultarList);
+        btonConsultarList.setBounds(250, 300, 210, 30);
+        btonConsultarList.addActionListener(this);
         
         panelConsulta.add(campoDocumento);
         campoDocumento.setBounds(510, 140, 170, 20);
@@ -202,6 +216,16 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         tipoUsuariosMap.put("Administrador", 1);
         tipoUsuariosMap.put("Usuario", 2);
         tipoUsuariosMap.put("Secretaria", 3);
+        tipoUsuariosMap.put("N/A", 4);
+        
+        String[] columnas = {"Documento", "Nombre", "Edad", "Profesión", "Dirección", "Teléfono", "Tipo"};
+        DefaultTableModel modeloTabla = new DefaultTableModel(null, columnas);
+        tablaUsuarios = new JTable(modeloTabla);
+        scrollPaneUsuarios = new javax.swing.JScrollPane(tablaUsuarios);
+
+       
+        scrollPaneUsuarios.setBounds(20, 340, 660, 150);
+        panelConsulta.add(scrollPaneUsuarios);
 
         getContentPane().add(panelConsulta);
         panelConsulta.setBounds(0, 0, 710, 420);
@@ -260,6 +284,47 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 		if (e.getSource()==btonEliminar) {
 			eliminaUsuario();
 		}
+		if (e.getSource() == btonConsultarList) {
+			cargarListaUsuarios();
+		}
+		
+	}
+
+	private void cargarListaUsuarios() {
+		
+		 DefaultTableModel modeloTabla = (DefaultTableModel) tablaUsuarios.getModel();
+		    modeloTabla.setRowCount(0); 
+		    UsuarioVo usuarioActual = miCoordinador.obtenerUsuarioActual(); 
+
+		   
+		    List<UsuarioVo> listaUsuarios = miCoordinador.consultarTodosLosUsuarios(usuarioActual);
+		   
+		   
+		    for (UsuarioVo usuario : listaUsuarios) {
+		        Object[] fila = {
+		            usuario.getDocumento(),
+		            usuario.getNombre(),
+		            usuario.getEdad(),
+		            usuario.getProfesion(),
+		            usuario.getDireccion(),
+		            usuario.getTelefono(),
+		            
+		        
+		            obtenerTipoUsuario(usuario.getTipo()) 
+		        };
+		        modeloTabla.addRow(fila);
+		    }
+		}
+
+		
+		private String obtenerTipoUsuario(int tipo) {
+		    for (Map.Entry<String, Integer> entry : tipoUsuariosMap.entrySet()) {
+		        if (entry.getValue().equals(tipo)) {
+		            return entry.getKey();
+		        }
+		    }
+		    return "N/A";
+		
 		
 	}
 
@@ -306,7 +371,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 	private void actualizaUsuario() {
 		
 		Integer edad = miCoordinador.validarEdad(campoEdad.getText().trim());
-	    
+		UsuarioVo actualiza = new UsuarioVo();
 	    if (edad != null) {
 	        UsuarioVo usuarioActual = miCoordinador.obtenerUsuarioActual(); 
 	        
@@ -321,24 +386,29 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
 	         
 	            String tipoSeleccionado = comboUsuarios.getSelectedItem().toString();
-	            int tipoUsuario = tipoUsuariosMap.get(tipoSeleccionado); 
+	            Integer tipoUsuario = tipoUsuariosMap.get(tipoSeleccionado); 
+	            
+	            if (tipoUsuario == null) {
+	                JOptionPane.showMessageDialog(null, "Tipo de usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+	                return; 
+	            }
 	            
 	            System.out.println("Tipo seleccionado: " + tipoSeleccionado);
 	            System.out.println("Tipo mapeado: " + tipoUsuario);
 	            
 	            miUsuarioVo.setTipo(tipoUsuario);
 
-	            String actualiza = "";
+	            
 	            if (miCoordinador.validarCampos(miUsuarioVo)) {
 	                actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
 	            } else {
-	                actualiza = "mas_datos"; 
+	                actualiza.setMensaje("mas_datos"); 
 	            }
 	            
-	            if (actualiza.equals("ok")) {
+	            if (actualiza.getMensaje().equals("ok")) {
 	                JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);            
 	            } else {
-	                if (actualiza.equals("mas_datos")) {
+	                if (actualiza.getMensaje().equals("mas_datos")) {
 	                    JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);            
 	                } else {
 	                    JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
@@ -353,17 +423,17 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 	            miUsuarioVo.setTelefono(campoTelefono.getText().trim());
 	            miUsuarioVo.setDireccion(campoDireccion.getText().trim());
 	            
-	            String actualiza = "";
+	            
 	            if (miCoordinador.validarCampos(miUsuarioVo)) {
 	                actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
 	            } else {
-	                actualiza = "mas_datos"; // Indicador de falta de datos
+	            	actualiza.setMensaje("mas_datos"); 
 	            }
 	            
-	            if (actualiza.equals("ok")) {
+	            if (actualiza.getMensaje().equals("ok")) {
 	                JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);            
 	            } else {
-	                if (actualiza.equals("mas_datos")) {
+	                if (actualiza.getMensaje().equals("mas_datos")) {
 	                    JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);            
 	                } else {
 	                    JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
