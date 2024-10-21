@@ -85,7 +85,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         labelTitulo.setForeground(Color.white);
        // labelTitulo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panelTitulo.add(labelTitulo);
-       labelTitulo.setBounds(5, 5, 380, 60);
+        labelTitulo.setBounds(5, 5, 380, 60);
         
         labelInferior.setFont(new java.awt.Font("Chiller", 0, 30)); // NOI18N
         labelInferior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -159,9 +159,5 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 		
 	}
-
-
-
-  
 
 }
