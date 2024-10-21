@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import controlador.Coordinador;
+import modelo.vo.UsuarioVo;
 
 /**
  *
@@ -20,11 +21,17 @@ public class VentanaLogin extends JDialog implements ActionListener{
     private javax.swing.JButton botonAceptar;
     private javax.swing.JPasswordField campoPass;
     private javax.swing.JComboBox comboUsuarios;
+    //Agregar etiqueta nombre usuario
+    private javax.swing.JLabel nombreUser;
+    private javax.swing.JTextField campoUser;
+    
     private javax.swing.JLabel imagen;
     private javax.swing.JLabel labelPass;
     private javax.swing.JLabel labelUser;
     private javax.swing.JPanel panelLogin;
     private javax.swing.JLabel tituloLogin;
+    //Agregamos input para escribir el username
+    
     
     private Coordinador miCoordinador;
     // End of variables declaration  
@@ -36,7 +43,8 @@ public class VentanaLogin extends JDialog implements ActionListener{
         super(parent, modal);
         initComponents();
         setTitle("Login");
-        setSize(275,330);
+        //Ajustamos el tamaño
+        setSize(290,370);
         setLocationRelativeTo(null);
         setResizable(false);
         
@@ -71,6 +79,8 @@ public class VentanaLogin extends JDialog implements ActionListener{
         botonAceptar = new javax.swing.JButton();
         comboUsuarios = new javax.swing.JComboBox();
         campoPass = new javax.swing.JPasswordField();
+        nombreUser = new javax.swing.JLabel();
+        campoUser = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -78,7 +88,7 @@ public class VentanaLogin extends JDialog implements ActionListener{
         panelLogin.setBackground(new java.awt.Color(204, 204, 204));
         panelLogin.setLayout(null);
 
-        tituloLogin.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); // NOI18N
+        tituloLogin.setFont(new java.awt.Font("Comic Sans MS", 0, 24)); 
         tituloLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tituloLogin.setText("Ventana Login");
         tituloLogin.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -90,35 +100,47 @@ public class VentanaLogin extends JDialog implements ActionListener{
         imagen.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
         panelLogin.add(imagen);
         imagen.setBounds(10, 70, 250, 100);
+        
+        //Agregamos al panel la etiqueta Username
+        nombreUser.setText("Username");
+        panelLogin.add(nombreUser);
+        nombreUser.setBounds(10,220 ,70 ,20 );
+        nombreUser.setVisible(false);
 
-        labelUser.setText("Usuario");
+        labelUser.setText("Tipo");
         panelLogin.add(labelUser);
         labelUser.setBounds(10, 190, 70, 20);
 
-        labelPass.setText("Pass");
+        labelPass.setText("Password");
         panelLogin.add(labelPass);
-        labelPass.setBounds(10, 220, 70, 14);
+        labelPass.setBounds(10, 250, 70, 14);
         labelPass.setVisible(false);
 
         botonAceptar.setText("Aceptar");
         panelLogin.add(botonAceptar);
-        botonAceptar.setBounds(150, 260, 110, 30);
+        botonAceptar.setBounds(90, 280, 110, 30);
         botonAceptar.addActionListener(this);
-
-        comboUsuarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Administrador", "Usuario"}));
+        
+        //Agregamos el tipo Secretaria a el combo
+        comboUsuarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Administrador", "Usuario","Secretaria"}));
         panelLogin.add(comboUsuarios);
         comboUsuarios.setBounds(70, 190, 190, 20);
         comboUsuarios.addActionListener(this);
         
+        //Agregamos el input de UserName al panel
+        panelLogin.add(campoUser);
+        campoUser.setBounds(70,220 ,190 ,20 );
+        campoUser.setVisible(false);
+        
         panelLogin.add(campoPass);
-        campoPass.setBounds(70, 220, 190, 20);
+        campoPass.setBounds(70, 250, 190, 20);
         campoPass.setVisible(false);
 
         getContentPane().add(panelLogin);
-        panelLogin.setBounds(0, 0, 270, 300);
+        panelLogin.setBounds(0, 0, 290, 370);
 
         pack();
-    }// </editor-fold>                        
+    }                   
 
    
 /////////////            
@@ -135,20 +157,35 @@ public class VentanaLogin extends JDialog implements ActionListener{
 		}
 		
 		if (evento.getSource()==botonAceptar) {
-			String resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoPass.getText());
-			System.out.println(resp);
-			if (resp.equals("error")) {
+			UsuarioVo resp=miCoordinador.validarIngreso(comboUsuarios.getSelectedIndex(),campoUser.getText(),campoPass.getText());
+			
+
+	        if (resp == null) {
+	          
+	            JOptionPane.showMessageDialog(null, "Error en la validación del usuario", "Error", JOptionPane.ERROR_MESSAGE);
+	            return; 
+	        }
+	        
+	        String mensaje = resp.getMensaje();
+	        
+	        if (mensaje == null) {
+	            
+	            return; 
+	        }
+			
+			
+			if (mensaje.equals("error")) {
 				JOptionPane.showMessageDialog(null, "No ha seleccionado un usuario","Advertencia",JOptionPane.WARNING_MESSAGE);
 			}else{
-				if (resp.equals("invalido")) {
+				if (mensaje.equals("invalido")) {
 					JOptionPane.showMessageDialog(null, "El pass no corresponde","Advertencia",JOptionPane.WARNING_MESSAGE);
 				}else{
-					if (resp.equals("desconectado")) {
+					if (mensaje.equals("desconectado")) {
 						JOptionPane.showMessageDialog(null, "No se pudo conectar a la BD, "
 								+ "verifique que se encuentre el linea","Error de Conexion",JOptionPane.ERROR_MESSAGE);
 					}else{
 						miCoordinador.asignarPrivilegios(resp);
-						miCoordinador.cerrarVentanaLogin();
+						
 					}
 				}
 			}
@@ -167,9 +204,13 @@ public class VentanaLogin extends JDialog implements ActionListener{
 		int index=comboUsuarios.getSelectedIndex();
 		
 		if (index==0) {
+			nombreUser.setVisible(false);
+			campoUser.setVisible(false);
 			labelPass.setVisible(false);
 			campoPass.setVisible(false);
 		}else{
+			nombreUser.setVisible(true);
+			campoUser.setVisible(true);
 			labelPass.setVisible(true);
 			campoPass.setVisible(true);
 		}

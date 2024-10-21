@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import controlador.Coordinador;
+import modelo.vo.UsuarioVo;
 
 /**
  *
@@ -26,7 +29,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	  private javax.swing.JButton botonRegistrar;
 	  private javax.swing.JLabel labelTitulo,labelInferior;
 	  private javax.swing.JPanel miPanelPrincipal,panelTitulo,panelInferior;
-	  
+	  private Map<String, Integer> tipoUsuariosMap;
 	  private JMenuBar barraMenu;
 	  private JMenu menu;
 	  private JMenuItem itemOpciones;
@@ -113,6 +116,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         itemOpciones.setText("Cambiar de Usuario");
         itemOpciones.addActionListener(this);
         
+        tipoUsuariosMap = new HashMap<>();
+        tipoUsuariosMap.put("Administrador", 1);
+        tipoUsuariosMap.put("Usuario", 2);
+        tipoUsuariosMap.put("Secretaria", 3);
+        
         menu.add(itemOpciones);
         barraMenu.add(menu);       
         
@@ -131,18 +139,33 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		this.miCoordinador=miCoordinador;
 	}
 
-	public void asignarPrivilegios(String usuario) {
-		labelTitulo.setText("Bienvenido : "+usuario);
-		
-		if (usuario.equals("Administrador")) {
-			botonConsultar.setVisible(true);
-			botonRegistrar.setVisible(true);
-		}else{
-			botonConsultar.setVisible(false);
-			botonRegistrar.setVisible(true);
+	public void asignarPrivilegios(UsuarioVo usuario) {
+		labelTitulo.setText("Bienvenido : "+usuario.getNombre());
+		for (String key : tipoUsuariosMap.keySet()) {
+	        if (tipoUsuariosMap.get(key).equals(usuario.getTipo())) {
+	            switch (key) {
+	                case "Administrador":
+	                    botonConsultar.setVisible(true);
+	                    botonRegistrar.setVisible(true);
+	                    break;
+	                case "Usuario":
+	                    botonConsultar.setVisible(true);
+	                    botonRegistrar.setVisible(false);
+	                    break;
+	                case "Secretaria":
+	                	botonConsultar.setVisible(true);
+	                    botonRegistrar.setVisible(true);
+	                	break;
+	                default:
+	                    
+	                    JOptionPane.showMessageDialog(this, "Tipo de usuario desconocido", "Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	            break; 
+	        }
+	    }
+            
 		}
 		
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

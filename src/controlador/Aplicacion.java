@@ -40,7 +40,7 @@ public class Aplicacion {
 		
 	
 		
-		miVentana.setVisible(true);
+		
 		miLogin.setVisible(true);
 	}
 

@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.List;
+
 import modelo.Logica;
 import modelo.dao.UsuarioDao;
 import modelo.vo.UsuarioVo;
@@ -16,6 +18,8 @@ public class Coordinador {
 	private VentanaRegistro miVentanaRegistro;
 	private VentanaConsultaIndividual miVentanaConsultaIndividual;
 	private UsuarioDao miUsuarioDao;
+	
+	private UsuarioVo usuarioActual;
 
 	public void setVentanaPrincipal(VentanaPrincipal miVentana) {
 		this.miVentana=miVentana;
@@ -28,17 +32,20 @@ public class Coordinador {
 	public void setLogica(Logica miLogica) {
 		this.miLogica=miLogica;
 	}
-
-	public String validarIngreso(int index, String pass) {		
-		return miLogica.validarIngreso(index,pass);
+	
+	//Modificacion para recibir un nombre de usuario
+	public UsuarioVo validarIngreso(int index,String user ,String pass) {		
+		return miLogica.validarIngreso(index,user,pass);
 	}
 
 	public void cerrarVentanaLogin() {
 		miLogin.dispose();
 	}
 
-	public void asignarPrivilegios(String usuario) {
+	public void asignarPrivilegios(UsuarioVo usuario) {
 		miVentana.asignarPrivilegios(usuario);
+		miVentanaConsultaIndividual.asignarPrivilegios(usuario);
+		
 	}
 
 	public void mostrarLogin() {
@@ -78,18 +85,37 @@ public class Coordinador {
 		// TODO Auto-generated method stub
 		return miLogica.validarEdad(edadIngresada);
 	}
-
-	public UsuarioVo consultarUsuario(String doc) {
 		
-		return miUsuarioDao.consultarUsuario(doc);
+	//Modificamos el argumento para enviar la password
+	public UsuarioVo consultarUsuario(String user, String pass) {
+		
+		return miUsuarioDao.consultarUsuario(user,pass);
 	}
 
-	public String actualizaUsuario(UsuarioVo miUsuarioVo) {
-		return miUsuarioDao.actualizaUsuario(miUsuarioVo);
+	public UsuarioVo actualizaUsuario(UsuarioVo miUsuarioVo, UsuarioVo usuarioActual) {
+		return miUsuarioDao.actualizaUsuario(miUsuarioVo, usuarioActual);
 	}
 
 	public String eliminarUsuario(String documento) {
 		return miUsuarioDao.eliminarUsuario(documento);
+	}
+
+	public void abrirVentanaPrincipal(UsuarioVo miUsuarioVo) {
+		this.usuarioActual = miUsuarioVo;
+		miVentana.setVisible(true);
+		
+	}
+	
+	 public UsuarioVo obtenerUsuarioActual() {
+	        return usuarioActual;
+	    }
+
+	public UsuarioVo consultarUsuarioDoc(String doc) {
+		return miUsuarioDao.consultarUsuarioDoc(doc);
+	}
+
+	public List<UsuarioVo> consultarTodosLosUsuarios(UsuarioVo usuarioActual) {
+		return miUsuarioDao.obtenerTodosLosUsuarios(usuarioActual);
 	}
 	
 }
