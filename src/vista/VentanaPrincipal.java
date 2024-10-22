@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -15,6 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import controlador.Coordinador;
+import modelo.vo.UsuarioVo;
 
 /**
  *
@@ -22,21 +25,21 @@ import controlador.Coordinador;
  */
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
-	  private javax.swing.JButton botonConsultar;
-	  private javax.swing.JButton botonRegistrar;
-	  private javax.swing.JLabel labelTitulo,labelInferior;
-	  private javax.swing.JPanel miPanelPrincipal,panelTitulo,panelInferior;
-	  
-	  private JMenuBar barraMenu;
-	  private JMenu menu;
-	  private JMenuItem itemOpciones;
-  
-	  private Dimension tamPantalla;
-	  private Rectangle pantalla;
-	  
-	  private Coordinador miCoordinador;
-	
-	
+    private javax.swing.JButton botonConsultar;
+    private javax.swing.JButton botonRegistrar;
+    private javax.swing.JLabel labelTitulo,labelInferior;
+    private javax.swing.JPanel miPanelPrincipal,panelTitulo,panelInferior;
+    private Map<String, Integer> tipoUsuariosMap;
+    private JMenuBar barraMenu;
+    private JMenu menu;
+    private JMenuItem itemOpciones;
+
+    private Dimension tamPantalla;
+    private Rectangle pantalla;
+
+    private Coordinador miCoordinador;
+
+
     /**
      * Creates new form VentanaPrincipal
      */
@@ -68,14 +71,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         botonRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
- //       getContentPane().setLayout(null);
+        //       getContentPane().setLayout(null);
 
         miPanelPrincipal.setBackground(Color.lightGray);
         miPanelPrincipal.setLayout(null);
-        
+
         panelTitulo.setBackground(Color.black);
         panelInferior.setBackground(Color.black);
-      
+
         panelTitulo.setLayout(null);
         panelInferior.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -83,10 +86,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         labelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelTitulo.setText("Bienvenido al Sistema");
         labelTitulo.setForeground(Color.white);
-       // labelTitulo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        // labelTitulo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         panelTitulo.add(labelTitulo);
-       labelTitulo.setBounds(5, 5, 380, 60);
-        
+        labelTitulo.setBounds(5, 5, 380, 60);
+
         labelInferior.setFont(new java.awt.Font("Chiller", 0, 30)); // NOI18N
         labelInferior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelInferior.setText("http://codejavu.blogspot.com");
@@ -104,20 +107,25 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         miPanelPrincipal.add(botonRegistrar);
         botonRegistrar.setBounds(20, 80, 190, 60);
         botonRegistrar.addActionListener(this);
-        
+
         barraMenu =new JMenuBar();
         menu=new JMenu();
         itemOpciones =new JMenuItem();
-        
+
         menu.setText("Opciones");
         itemOpciones.setText("Cambiar de Usuario");
         itemOpciones.addActionListener(this);
-        
+
+        tipoUsuariosMap = new HashMap<>();
+        tipoUsuariosMap.put("Administrador", 1);
+        tipoUsuariosMap.put("Usuario", 2);
+        tipoUsuariosMap.put("Secretaria", 3);
+
         menu.add(itemOpciones);
-        barraMenu.add(menu);       
-        
+        barraMenu.add(menu);
+
         setJMenuBar(barraMenu);
-  
+
         miPanelPrincipal.setBounds(0, 0, 670, 350);
         panelTitulo.setBounds(0, 0, 1500, 70);
         panelInferior.setBounds(0, 667, 1350,40);
@@ -127,41 +135,58 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-	public void setCoordinador(Coordinador miCoordinador) {
-		this.miCoordinador=miCoordinador;
-	}
+    public void setCoordinador(Coordinador miCoordinador) {
+        this.miCoordinador=miCoordinador;
+    }
 
-	public void asignarPrivilegios(String usuario) {
-		labelTitulo.setText("Bienvenido : "+usuario);
-		
-		if (usuario.equals("Administrador")) {
-			botonConsultar.setVisible(true);
-			botonRegistrar.setVisible(true);
-		}else{
-			botonConsultar.setVisible(false);
-			botonRegistrar.setVisible(true);
-		}
-		
-	}
+    public void asignarPrivilegios(UsuarioVo usuario) {
+        labelTitulo.setText("Bienvenido : "+usuario.getNombre());
+        for (String key : tipoUsuariosMap.keySet()) {
+            if (tipoUsuariosMap.get(key).equals(usuario.getTipo())) {
+                switch (key) {
+                    case "Administrador":
+                        botonConsultar.setVisible(true);
+                        botonRegistrar.setVisible(true);
+                        break;
+                    case "Usuario":
+                        System.out.println("funciona");
+                        botonConsultar.setVisible(true);
+                        botonRegistrar.setVisible(false);
+                        miCoordinador.setUsuarioActual(usuario); // Para pasar el usuario actual
+                        break;
+                    case "Secretaria":
+                        botonConsultar.setVisible(true);
+                        botonRegistrar.setVisible(true);
+                        break;
+                    default:
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==itemOpciones) {
-			miCoordinador.mostrarLogin();			
-		}
-		
-		if (e.getSource()==botonRegistrar) {
-			miCoordinador.mostrarVentanaRegistro();			
-		}
-		
-		if (e.getSource()==botonConsultar) {
-			miCoordinador.mostrarVentanaConsulta();			
-		}
-		
-	}
+                        JOptionPane.showMessageDialog(this, "Tipo de usuario desconocido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+        }
+
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource()==itemOpciones) {
+            miCoordinador.mostrarLogin();
+        }
+
+        if (e.getSource()==botonRegistrar) {
+            miCoordinador.mostrarVentanaRegistro();
+        }
+
+        if (e.getSource()==botonConsultar) {
+            miCoordinador.mostrarVentanaConsulta();
+        }
+
+    }
 
 
 
-  
+
 
 }

@@ -2,12 +2,17 @@ package vista;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import modelo.vo.UsuarioVo;
 
@@ -21,21 +26,26 @@ import controlador.Coordinador;
 public class VentanaConsultaIndividual extends JDialog implements ActionListener{
 
     private JLabel LabelDireccion,TituloConsulta, labelDocumento,labelEdad, labelNombre, labelProfesion, labelTelefono,labelTexto;
-    private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar;
+    private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar,btonConsultarList;
     private JTextField campoTelefono,campoDireccion,campoConsultaDocumento, campoDocumento,campoEdad,campoNombre,campoProfesion;
     private javax.swing.JPanel panelConsulta;
-    
+    private javax.swing.JComboBox comboUsuarios;
+    private JLabel labelTipo;
+    private Map<String, Integer> tipoUsuariosMap;
     private javax.swing.JSeparator separadorInferior,separadorSuperior;
-    
+
+    private javax.swing.JTable tablaUsuarios;
+    private javax.swing.JScrollPane scrollPaneUsuarios;
+
     private Coordinador miCoordinador;
-	
+
     /**
      * Creates new form VentanaConsultaIndividual
      */
     public VentanaConsultaIndividual(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setSize(710,330);
+        setSize(710,720);
         setResizable(false);
         setLocationRelativeTo(null);
     }
@@ -69,6 +79,11 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         btonCancelar = new javax.swing.JButton();
         btonConsultar = new javax.swing.JButton();
         campoDocumento = new javax.swing.JTextField();
+        comboUsuarios = new javax.swing.JComboBox();
+        labelTipo = new javax.swing.JLabel();
+        btonConsultarList = new javax.swing.JButton();
+        tablaUsuarios= new javax.swing.JTable();
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         //getContentPane().setLayout(null);
@@ -85,7 +100,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
         labelProfesion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         labelProfesion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        labelProfesion.setText("Profesi�n:");
+        labelProfesion.setText("Profesion:");
         panelConsulta.add(labelProfesion);
         labelProfesion.setBounds(0, 170, 90, 20);
 
@@ -115,7 +130,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 
         LabelDireccion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         LabelDireccion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        LabelDireccion.setText("Direcci�n:");
+        LabelDireccion.setText("Direccion:");
         panelConsulta.add(LabelDireccion);
         LabelDireccion.setBounds(0, 200, 90, 20);
 
@@ -124,184 +139,338 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
         labelNombre.setText("*Nombre:");
         panelConsulta.add(labelNombre);
         labelNombre.setBounds(0, 140, 90, 20);
+
+
+        labelTipo.setFont(new java.awt.Font("Verdana", 0, 12));
+        labelTipo.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelTipo.setText("Tipo");
+        panelConsulta.add(labelTipo);
+        labelTipo.setBounds(0, 230, 90, 20);
+
+        comboUsuarios.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione", "Administrador", "Usuario","Secretaria"}));
+        panelConsulta.add(comboUsuarios);
+        comboUsuarios.setBounds(100, 230, 190, 20);
+        comboUsuarios.addActionListener(this);
+
         panelConsulta.add(separadorInferior);
-        separadorInferior.setBounds(20, 240, 660, 10);
+        separadorInferior.setBounds(20, 260, 660, 10);
+
         panelConsulta.add(campoNombre);
         campoNombre.setBounds(100, 140, 300, 20);
+
         panelConsulta.add(campoDireccion);
         campoDireccion.setBounds(100, 200, 300, 20);
+
         panelConsulta.add(campoTelefono);
         campoTelefono.setBounds(510, 200, 170, 20);
+
         panelConsulta.add(campoProfesion);
         campoProfesion.setBounds(100, 170, 300, 20);
+
         panelConsulta.add(campoConsultaDocumento);
         campoConsultaDocumento.setBounds(390, 90, 120, 20);
+
         panelConsulta.add(campoEdad);
         campoEdad.setBounds(510, 170, 170, 20);
+
         panelConsulta.add(separadorSuperior);
         separadorSuperior.setBounds(20, 120, 660, 10);
+
         btonActualizar = new javax.swing.JButton();
         btonEliminar = new javax.swing.JButton();
 
         btonCancelar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonCancelar.setText("Cancelar");
         panelConsulta.add(btonCancelar);
-        btonCancelar.setBounds(510, 260, 170, 30);
+        btonCancelar.setBounds(460, 260, 170, 30);
         btonCancelar.addActionListener(this);
 
         btonConsultar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonConsultar.setText("Buscar");
         btonConsultar.addActionListener(this);
         panelConsulta.add(btonConsultar);
-        btonConsultar.setBounds(520, 90, 110, 20);   
-        
+        btonConsultar.setBounds(520, 90, 110, 20);
+
         btonActualizar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonActualizar.setText("Actualizar");
         panelConsulta.add(btonActualizar);
-        btonActualizar.setBounds(110, 260, 170, 30);
+        btonActualizar.setBounds(100, 260, 170, 30);
         btonActualizar.addActionListener(this);
-        
+
         btonEliminar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btonEliminar.setText("Eliminar");
         panelConsulta.add(btonEliminar);
-        btonEliminar.setBounds(310, 260, 170, 30);
+        btonEliminar.setBounds(280, 260, 170, 30);
         btonEliminar.addActionListener(this);
-        
+
+        btonConsultarList.setFont(new java.awt.Font("Verdana", 0, 14));
+        btonConsultarList.setText("Consultar Lista");
+        panelConsulta.add(btonConsultarList);
+        btonConsultarList.setBounds(250, 300, 210, 30);
+        btonConsultarList.addActionListener(this);
+
         panelConsulta.add(campoDocumento);
         campoDocumento.setBounds(510, 140, 170, 20);
 
+        tipoUsuariosMap = new HashMap<>();
+        tipoUsuariosMap.put("Administrador", 1);
+        tipoUsuariosMap.put("Usuario", 2);
+        tipoUsuariosMap.put("Secretaria", 3);
+        tipoUsuariosMap.put("N/A", 4);
+
+        String[] columnas = {"Documento", "Nombre", "Edad", "Profesión", "Dirección", "Teléfono", "Tipo"};
+        DefaultTableModel modeloTabla = new DefaultTableModel(null, columnas);
+        tablaUsuarios = new JTable(modeloTabla);
+        scrollPaneUsuarios = new javax.swing.JScrollPane(tablaUsuarios);
+
+
+        scrollPaneUsuarios.setBounds(20, 340, 660, 150);
+        panelConsulta.add(scrollPaneUsuarios);
+
         getContentPane().add(panelConsulta);
-        panelConsulta.setBounds(0, 0, 710, 310);
+        panelConsulta.setBounds(0, 0, 710, 420);
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
- 
-	public void setCoordinador(Coordinador miCoordinador) {
-		this.miCoordinador=miCoordinador;
-	}
+    public void asignarPrivilegios(UsuarioVo usuario) {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource()==btonCancelar) {
-			limpiarVentana();
-			dispose();
-		}
-		
-		if (e.getSource()==btonConsultar) {
-			consultarUsuario();
-		}
-		
-		if (e.getSource()==btonActualizar) {
-			actualizaUsuario();
-		}
-		
-		if (e.getSource()==btonEliminar) {
-			eliminaUsuario();
-		}
-		
-	}
+        for (String key : tipoUsuariosMap.keySet()) {
+            if (tipoUsuariosMap.get(key).equals(usuario.getTipo())) {
+                switch (key) {
+                    case "Administrador":
+                        comboUsuarios.setVisible(true);
+                        labelTipo.setVisible(true);
+                        break;
+                    case "Usuario":
+                        comboUsuarios.setVisible(false);
+                        labelTipo.setVisible(false);
+                        break;
+                    case "Secretaria":
+                        comboUsuarios.setVisible(false);
+                        labelTipo.setVisible(false);
+                        break;
+                    default:
 
-	private void limpiarVentana() {
-		campoConsultaDocumento.setText("");
-		campoNombre.setText("");
-		campoDocumento.setText("");
-		campoProfesion.setText("");
-		campoDireccion.setText("");
-		campoTelefono.setText("");
-		campoEdad.setText("");
-	}
+                        JOptionPane.showMessageDialog(this, "Tipo de usuario desconocido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            }
+        }
 
-	private void consultarUsuario() {
-		UsuarioVo usuarioVO=miCoordinador.consultarUsuario(campoConsultaDocumento.getText().trim());
-		
-		if (usuarioVO!=null) {
-			
-			campoNombre.setText(usuarioVO.getNombre());
-			campoDocumento.setText(usuarioVO.getDocumento());
-			campoProfesion.setText(usuarioVO.getProfesion());
-			campoDireccion.setText(usuarioVO.getDireccion());
-			campoTelefono.setText(usuarioVO.getTelefono());
-			campoEdad.setText(usuarioVO.getEdad()+"");
-			
-		}else{
-			JOptionPane.showMessageDialog(null, "El usuario no se encuentra registrado en el sistema",
-					"Datos Inexistentes",JOptionPane.WARNING_MESSAGE);
-		}
-		
-	}
-	
-	/**
-	 * metodo que permite actualizar un usuario, se envia el numero de documento del usuario 
-	 * obtenido del campo de texto especifico de la ventana
-	 */
-	private void actualizaUsuario() {
-		
-		Integer edad=miCoordinador.validarEdad(campoEdad.getText().trim());
-		
-		if (edad!=null) {
-			
-			UsuarioVo miUsuarioVo=new UsuarioVo();
-			//se asigna cada dato... el metodo trim() del final, permite eliminar espacios al inicio y al final, en caso de que se ingresen datos con espacio
-			miUsuarioVo.setDocumento(campoDocumento.getText().trim());
-			miUsuarioVo.setNombre(campoNombre.getText().trim());
-			miUsuarioVo.setEdad(Integer.parseInt(campoEdad.getText().trim()));
-			miUsuarioVo.setProfesion(campoProfesion.getText().trim());
-			miUsuarioVo.setTelefono(campoTelefono.getText().trim());
-			miUsuarioVo.setDireccion(campoDireccion.getText().trim());
-			
-			String actualiza="";
-			//se llama al metodo validarCampos(), este retorna true o false, dependiendo de eso ingresa a una de las opciones
-			if (miCoordinador.validarCampos(miUsuarioVo)) {
-				//si se retorn� true es porque todo est� correcto y se llama a actualizar
-				actualiza=miCoordinador.actualizaUsuario(miUsuarioVo);//en registro se almacena ok o error, dependiendo de lo que retorne el metodo
-			}else{
-				actualiza="mas_datos";//si validarCampos() retorna false, entonces se guarda la palabra mas_datos para indicar que hace falta diligenciar los campos obligatorios
-			}
-			
-			//si el registro es exitoso muestra un mensaje en pantalla, sino, se valida si necesita mas datos o hay algun error
-			if (actualiza.equals("ok")) {
 
-                JOptionPane.showMessageDialog(null, " Se ha Modificado Correctamente ","Confirmaci�n",JOptionPane.INFORMATION_MESSAGE);
-                limpiarVentana();
+
+    }
+
+    public void setCoordinador(Coordinador miCoordinador) {
+        this.miCoordinador=miCoordinador;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource()==btonCancelar) {
+            limpiarVentana();
+            dispose();
+        }
+
+        if (e.getSource()==btonConsultar) {
+            consultarUsuario();
+        }
+
+        if (e.getSource()==btonActualizar) {
+            actualizaUsuario();
+        }
+
+        if (e.getSource()==btonEliminar) {
+            eliminaUsuario();
+        }
+        if (e.getSource() == btonConsultarList) {
+            cargarListaUsuarios();
+        }
+
+    }
+
+    private void cargarListaUsuarios() {
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) tablaUsuarios.getModel();
+        modeloTabla.setRowCount(0);
+        UsuarioVo usuarioActual = miCoordinador.obtenerUsuarioActual();
+
+
+        List<UsuarioVo> listaUsuarios = miCoordinador.consultarTodosLosUsuarios(usuarioActual);
+
+
+        for (UsuarioVo usuario : listaUsuarios) {
+            Object[] fila = {
+                    usuario.getDocumento(),
+                    usuario.getNombre(),
+                    usuario.getEdad(),
+                    usuario.getProfesion(),
+                    usuario.getDireccion(),
+                    usuario.getTelefono(),
+
+
+                    obtenerTipoUsuario(usuario.getTipo())
+            };
+            modeloTabla.addRow(fila);
+        }
+    }
+
+
+    private String obtenerTipoUsuario(int tipo) {
+        for (Map.Entry<String, Integer> entry : tipoUsuariosMap.entrySet()) {
+            if (entry.getValue().equals(tipo)) {
+                return entry.getKey();
+            }
+        }
+        return "N/A";
+
+
+    }
+
+    private void limpiarVentana() {
+        campoConsultaDocumento.setText("");
+        campoNombre.setText("");
+        campoDocumento.setText("");
+        campoProfesion.setText("");
+        campoDireccion.setText("");
+        campoTelefono.setText("");
+        campoEdad.setText("");
+    }
+
+    private void consultarUsuario() {
+        UsuarioVo usuarioVO=miCoordinador.consultarUsuarioDoc(campoConsultaDocumento.getText().trim());
+
+        if (usuarioVO!=null) {
+
+            campoNombre.setText(usuarioVO.getNombre());
+            campoDocumento.setText(usuarioVO.getDocumento());
+            campoProfesion.setText(usuarioVO.getProfesion());
+            campoDireccion.setText(usuarioVO.getDireccion());
+            campoTelefono.setText(usuarioVO.getTelefono());
+            campoEdad.setText(usuarioVO.getEdad()+"");
+
+            for (String key : tipoUsuariosMap.keySet()) {
+                if (tipoUsuariosMap.get(key).equals(usuarioVO.getTipo())) {
+                    comboUsuarios.setSelectedItem(key);
+                    break;
+                }
+            }
+
+        }else{
+            JOptionPane.showMessageDialog(null, "El usuario no se encuentra registrado en el sistema",
+                    "Datos Inexistentes",JOptionPane.WARNING_MESSAGE);
+        }
+
+    }
+
+    /**
+     * metodo que permite actualizar un usuario, se envia el numero de documento del usuario
+     * obtenido del campo de texto especifico de la ventana
+     */
+    private void actualizaUsuario() {
+
+        Integer edad = miCoordinador.validarEdad(campoEdad.getText().trim());
+        UsuarioVo actualiza = new UsuarioVo();
+        if (edad != null) {
+            UsuarioVo usuarioActual = miCoordinador.obtenerUsuarioActual();
+
+            if (usuarioActual.getTipo() == 1) {
+                UsuarioVo miUsuarioVo = new UsuarioVo();
+                miUsuarioVo.setDocumento(campoDocumento.getText().trim());
+                miUsuarioVo.setNombre(campoNombre.getText().trim());
+                miUsuarioVo.setEdad(edad);
+                miUsuarioVo.setProfesion(campoProfesion.getText().trim());
+                miUsuarioVo.setTelefono(campoTelefono.getText().trim());
+                miUsuarioVo.setDireccion(campoDireccion.getText().trim());
+
+
+                String tipoSeleccionado = comboUsuarios.getSelectedItem().toString();
+                Integer tipoUsuario = tipoUsuariosMap.get(tipoSeleccionado);
+
+                if (tipoUsuario == null) {
+                    JOptionPane.showMessageDialog(null, "Tipo de usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                System.out.println("Tipo seleccionado: " + tipoSeleccionado);
+                System.out.println("Tipo mapeado: " + tipoUsuario);
+
+                miUsuarioVo.setTipo(tipoUsuario);
+
+
+                if (miCoordinador.validarCampos(miUsuarioVo)) {
+                    actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
+                } else {
+                    actualiza.setMensaje("mas_datos");
+                }
+
+                if (actualiza.getMensaje().equals("ok")) {
+                    JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    if (actualiza.getMensaje().equals("mas_datos")) {
+                        JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else if (usuarioActual.getTipo() != 1)  {
+                UsuarioVo miUsuarioVo = new UsuarioVo();
+                miUsuarioVo.setDocumento(campoDocumento.getText().trim());
+                miUsuarioVo.setNombre(campoNombre.getText().trim());
+                miUsuarioVo.setEdad(edad);
+                miUsuarioVo.setProfesion(campoProfesion.getText().trim());
+                miUsuarioVo.setTelefono(campoTelefono.getText().trim());
+                miUsuarioVo.setDireccion(campoDireccion.getText().trim());
+
+
+                if (miCoordinador.validarCampos(miUsuarioVo)) {
+                    actualiza = miCoordinador.actualizaUsuario(miUsuarioVo,usuarioActual);
+                } else {
+                    actualiza.setMensaje("mas_datos");
+                }
+
+                if (actualiza.getMensaje().equals("ok")) {
+                    JOptionPane.showMessageDialog(null, "Se ha Modificado Correctamente", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    if (actualiza.getMensaje().equals("mas_datos")) {
+                        JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No tiene privilegios para realizar esta acción.", "Acceso Denegado", JOptionPane.WARNING_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una edad válida!!!", "Advertencia", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void eliminaUsuario() {
+        String documento=campoDocumento.getText().trim();
+        String elimina="";
+        if (!documento.equals("")) {
+
+            int resp=JOptionPane.showConfirmDialog(null,"Esta seguro de eliminar el usuario "+documento+"?");
+            if (JOptionPane.OK_OPTION == resp){
+                elimina=miCoordinador.eliminarUsuario(documento);
+
+                if (elimina.equals("ok")) {
+                    JOptionPane.showMessageDialog(null, " Se ha Eliminado" +
+                            " Correctamente","Informaci�n",JOptionPane.INFORMATION_MESSAGE);
+                    limpiarVentana();
+                }else{
+                    JOptionPane.showMessageDialog(null, "No se pudo eliminar ","Informaci�n",JOptionPane.WARNING_MESSAGE);
+                }
+
             }else{
-				if (actualiza.equals("mas_datos")) {
-					JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios","Faltan Datos",JOptionPane.WARNING_MESSAGE);			
-				}else{
-		            JOptionPane.showMessageDialog(null, "Error al Modificar","Error",JOptionPane.ERROR_MESSAGE);
-				}
-			}					
-			
-		}else{
-			JOptionPane.showMessageDialog(null, "Debe ingresar una edad Valida!!!","Advertencia",JOptionPane.ERROR_MESSAGE);
-		}
+                JOptionPane.showMessageDialog(null, "Ingrese un documento ","Informaci�n",JOptionPane.WARNING_MESSAGE);
+            }
 
-				
-	}
-	
-	private void eliminaUsuario() {
-		String documento=campoDocumento.getText().trim();
-		String elimina="";
-		if (!documento.equals("")) {
-			
-			int resp=JOptionPane.showConfirmDialog(null,"Esta seguro de eliminar el usuario "+documento+"?");
-		      if (JOptionPane.OK_OPTION == resp){
-		    	  elimina=miCoordinador.eliminarUsuario(documento);
-		    	  
-					if (elimina.equals("ok")) {
-						JOptionPane.showMessageDialog(null, " Se ha Eliminado" +
-			            		" Correctamente","Informaci�n",JOptionPane.INFORMATION_MESSAGE);	
-						limpiarVentana();
-					}else{
-						JOptionPane.showMessageDialog(null, "No se pudo eliminar ","Informaci�n",JOptionPane.WARNING_MESSAGE);
-					}
-					
-				}else{
-					JOptionPane.showMessageDialog(null, "Ingrese un documento ","Informaci�n",JOptionPane.WARNING_MESSAGE);
-				}
- 
-		      }
-	}
+        }
+    }
 
 
 }
