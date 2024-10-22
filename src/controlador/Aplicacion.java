@@ -1,5 +1,4 @@
 package controlador;
-
 import modelo.Logica;
 import modelo.dao.UsuarioDao;
 import vista.VentanaConsultaIndividual;
