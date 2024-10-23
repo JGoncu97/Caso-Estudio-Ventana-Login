@@ -28,10 +28,11 @@ public class UsuarioDao {
 		String resultado="";
 			
 		Connection connection=null;
-		Conexion conexion=new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement=null;
 		
 		connection=conexion.getConnection();
+		
 		String consulta="INSERT INTO usuario (documento,nombre,profesion,edad,direccion,telefono,tipo)" +
 				" VALUES (?,?,?,?,?,?,?)";
 		
@@ -60,7 +61,7 @@ public class UsuarioDao {
 	//Modificamos el argumento para recibir la pass en vez del doc
 	public UsuarioVo consultarUsuario(String user,String pass) {
 		Connection connection=null;
-		Conexion miConexion=new Conexion();
+		Conexion miConexion=Conexion.getInstancia();
 		PreparedStatement statement=null;
 		ResultSet result=null;
 		
@@ -107,7 +108,7 @@ public class UsuarioDao {
 	
 	public UsuarioVo consultarUsuarioDoc(String doc) {
 		Connection connection=null;
-		Conexion miConexion=new Conexion();
+		Conexion miConexion=Conexion.getInstancia();
 		PreparedStatement statement=null;
 		ResultSet result=null;
 		
@@ -156,7 +157,7 @@ public class UsuarioDao {
 		 	UsuarioVo resultado = new UsuarioVo();
 		    Connection connection = null;
 		    PreparedStatement preStatement = null;
-		    Conexion miConexion = new Conexion();
+		    Conexion miConexion = Conexion.getInstancia();
 
 		    try {
 		        connection = miConexion.getConnection();
@@ -216,7 +217,7 @@ public class UsuarioDao {
 
 	public String eliminarUsuario(String documento) {
 		Connection connection=null;
-		Conexion miConexion=new Conexion();
+		Conexion miConexion=Conexion.getInstancia();
 		connection=miConexion.getConnection();
 		
 		String resp="";
@@ -242,7 +243,7 @@ public class UsuarioDao {
 	public List<UsuarioVo> obtenerTodosLosUsuarios(UsuarioVo usuarioActual) {
 		List<UsuarioVo> listaUsuarios = new ArrayList<>();
 	    Connection connection = null;
-	    Conexion miConexion=new Conexion();
+	    Conexion miConexion=Conexion.getInstancia();
 	    PreparedStatement statement = null;
 	    ResultSet resultSet = null;
 

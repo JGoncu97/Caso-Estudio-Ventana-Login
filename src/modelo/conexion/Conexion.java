@@ -24,9 +24,17 @@ public class Conexion {
 	private String password="";
 	private String url="";
 
-	Connection conn=null;
+	private static Conexion instancia;
+	
+	
+	private Connection conn = null;
+	
+	private Conexion() {
+		conectar();
+		}
+	
 	//constructor de la clase
-	public Conexion(){
+	private void conectar(){
 		cargarCredenciales();
 		
 		try {
@@ -48,8 +56,12 @@ public class Conexion {
 	
 	private void cargarCredenciales() {
 		try {
+			/*propiedades.load(
+					new FileInputStream("C:\\Users\\SENA\\Desktop\\019\\Caso-Estudio-Ventana-Login\\properties\\credenciales.properties"));*/
+			
 			propiedades.load(
-					new FileInputStream("C:\\Users\\SENA\\Desktop\\019\\Caso-Estudio-Ventana-Login\\properties\\credenciales.properties"));
+					new FileInputStream("E:\\5to trismestre\\Cristian\\CasoEstudio\\Caso de Estudio\\VentanaLogin\\properties\\credenciales.properties"));
+			
 			
 			nombreBd=propiedades.getProperty("db.nombreBd");
 			usuario=propiedades.getProperty("db.usuario");
@@ -67,12 +79,41 @@ public class Conexion {
 	}
 	
 	
+	public static Conexion getInstancia() {
+		if (instancia == null) {
+			instancia = new Conexion(); // Crear la instancia si no existe
+		}
+			return instancia;
+	}
+	
+	
+	
 	
 	public Connection getConnection(){
-		return conn;
+		try {
+				if (conn == null || conn.isClosed()) {
+					conectar(); // Vuelve a establecer la conexión si se ha cerrado o es nula
+				}
+			} catch (SQLException e) {
+				System.out.println("Error al verificar el estado de la conexión: " + e.getMessage());
+			}
+			return conn;
 	}
+	
+	
 	public void desconectar(){
-		conn=null;
+		if (conn != null) {
+			try {
+				conn.close();
+				System.out.println("Conexión cerrada.");
+			} catch (SQLException e) {
+				System.out.println("Error al cerrar la conexión: " + e.getMessage());
+			} finally {
+				conn = null; // Solo se marca como null después de cerrar la conexión
+			}
+		}
 	}
+	
+	
 }
 
