@@ -27,6 +27,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
     private javax.swing.JButton botonConsultar;
     private javax.swing.JButton botonRegistrar;
+	  private javax.swing.JButton botonRegistrarProducto;
+	  private javax.swing.JButton botonConsultarProducto;
+	  private javax.swing.JButton comprarProducto;
     private javax.swing.JLabel labelTitulo, labelInferior;
     private javax.swing.JPanel miPanelPrincipal, panelTitulo, panelInferior;
     private Map<String, Integer> tipoUsuariosMap;
@@ -62,6 +65,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         labelInferior = new javax.swing.JLabel();
         botonConsultar = new javax.swing.JButton();
         botonRegistrar = new javax.swing.JButton();
+        botonRegistrarProducto = new javax.swing.JButton();
+        botonConsultarProducto = new javax.swing.JButton();
+        comprarProducto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,7 +85,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         labelTitulo.setText("Bienvenido al Sistema");
         labelTitulo.setForeground(Color.white);
         panelTitulo.add(labelTitulo);
-        labelTitulo.setBounds(5, 5, 380, 60);
+         labelTitulo.setBounds(5, 5, 380, 60);
 
         labelInferior.setFont(new java.awt.Font("Chiller", 0, 30));
         labelInferior.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -98,6 +104,24 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         miPanelPrincipal.add(botonRegistrar);
         botonRegistrar.setBounds(20, 80, 190, 60);
         botonRegistrar.addActionListener(this);
+        
+        botonRegistrarProducto.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        botonRegistrarProducto.setText("REGISTRAR PRODUCTO");
+        miPanelPrincipal.add(botonRegistrarProducto);
+        botonRegistrarProducto.setBounds(20, 160, 400, 60);
+        botonRegistrarProducto.addActionListener(this);
+        
+        botonConsultarProducto.setFont(new java.awt.Font("Tahoma", 0, 24));
+        botonConsultarProducto.setText("CONSULTAR PRODUCTO");
+        miPanelPrincipal.add(botonConsultarProducto);
+        botonConsultarProducto.setBounds(20, 240, 400, 60);
+        botonConsultarProducto.addActionListener(this);
+        
+        comprarProducto.setFont(new java.awt.Font("Tahoma", 0, 24));
+        comprarProducto.setText("COMPRAR PRODUCTO");
+        miPanelPrincipal.add(comprarProducto);
+        comprarProducto.setBounds(20, 320, 400, 60);
+        comprarProducto.addActionListener(this);
 
         barraMenu = new JMenuBar();
         menu = new JMenu();
@@ -169,5 +193,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         if (e.getSource() == botonConsultar) {
             miCoordinador.mostrarVentanaConsulta();
         }
+		if (e.getSource()==botonRegistrarProducto) {
+			miCoordinador.mostrarVentanaRegistroProducto();
+		}
+		
+		if (e.getSource()==botonConsultarProducto) {
+			miCoordinador.mostrarVentanaConsultaProducto();
+		}
+		
     }
 }
