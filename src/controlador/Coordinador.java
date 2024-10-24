@@ -162,4 +162,8 @@ public class Coordinador {
 		return miProductoDao.actualizarProducto(miProductoVo);
 	}
 	
+	public String eliminarProducto(String idProducto) {
+		return miProductoDao.eliminarProducto(idProducto);
+	}
+	
 }

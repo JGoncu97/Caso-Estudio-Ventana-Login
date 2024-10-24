@@ -208,6 +208,57 @@ public class ProductoDao {
 				
 	}
 	
+	public String eliminarProducto(String idProducto) {
+		String resultado = "";
+		
+		Connection connection = null;
+		Conexion conexion = new Conexion();
+		PreparedStatement preStatement = null;
+		ResultSet result = null;
+		
+		connection = conexion.getConnection();
+		
+		try {
+			String consulta = "SELECT * FROM productos WHERE id_producto = ?";
+			if (connection != null) {
+				preStatement = connection.prepareStatement(consulta);
+				preStatement.setString(1, idProducto);
+				result = preStatement.executeQuery();
+				
+				if (result.next()) {
+					consulta = "DELETE FROM productos WHERE id_producto = ?";
+					preStatement = connection.prepareStatement(consulta);
+					preStatement.setString(1, idProducto);
+					preStatement.executeUpdate();
+					resultado = "El producto ha sido eliminada satisfactoriamente";
+					
+				} else {
+					resultado = "El producto que intenta eliminar no ha sido registrado";
+					
+				}
+			}
+										
+		} catch (SQLException e) {
+			resultado = "Error";
+			throw new RuntimeException(e.getMessage());
+			
+		} finally {
+			try {
+				if (result != null) result.close();
+				if (preStatement != null) preStatement.close();
+				conexion.desconectar();
+				System.out.println("Todos los recursos han sido cerrados");
+				
+			} catch (SQLException e) {
+				throw new RuntimeException("Error al cerrar los recursos: " + e.getMessage());
+			
+			}
+			
+		}
+		return resultado;
+		
+	}
+	
 	
 	public void setCoordinador(Coordinador miCoordinador) {
 		this.miCoordinador = miCoordinador;

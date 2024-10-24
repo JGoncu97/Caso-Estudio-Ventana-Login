@@ -209,7 +209,7 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 		}
 		
 		if (e.getSource()==btonEliminar) {
-			
+			eliminarProducto();
 		}
 		if (e.getSource() == btonConsultarList) {
 			consultarListaproductos();
@@ -237,8 +237,8 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 					JOptionPane.showMessageDialog(null, "El producto no se encuentra registrado");
 					
 				} else {
-					campoIdProducto.setText(miProductoVo.getIdProducto());
 					campoNombre.setText(miProductoVo.getNombre());
+					campoIdProducto.setText(miProductoVo.getIdProducto());
 					campoPrecio.setText(String.valueOf(miProductoVo.getPrecio()));
 					campoCantidad.setText(String.valueOf(miProductoVo.getCantidad()));
 					
@@ -304,7 +304,7 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 			}
 			try {
 				int cantidad = Integer.parseInt(campoCantidad.getText());
-				miProductoVo.setCantidad(cantidad);				
+				miProductoVo.setCantidad(cantidad);	
 				
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(null, ("Por favor introduce un valor númerico valido "
@@ -321,7 +321,26 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 			
 		}
 	}
-
+	
+	private void eliminarProducto() {
+		String idProducto = campoConsultarIdProducto.getText();
+		String mensaje = "";
+		
+		if (campoConsultarIdProducto.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Ingrese un documento para eliminar el producto");
+			
+		} else {
+			try {
+				mensaje = miCoordinador.eliminarProducto(idProducto);
+				JOptionPane.showMessageDialog(null, mensaje);
+				
+			} catch (RuntimeException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				
+			}
+			
+		}
+	}
 	
 	
 	

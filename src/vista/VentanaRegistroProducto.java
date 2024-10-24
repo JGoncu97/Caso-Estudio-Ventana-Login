@@ -144,8 +144,8 @@ public class VentanaRegistroProducto extends JDialog implements ActionListener {
 			registrarProducto();
 		}
 		if (e.getSource()==btonCancelar) {
-			
-			// dispose();
+			limpiarVentana();
+			dispose();
 		}
 	}
 	
@@ -188,6 +188,13 @@ public class VentanaRegistroProducto extends JDialog implements ActionListener {
 			}			
 			
 		}
+	}
+	
+	private void limpiarVentana() {
+		campoNombre.setText("");
+		campoIdProducto.setText("");
+		campoPrecio.setText("");
+		campoCantidad.setText("");
 	}
 
 }
