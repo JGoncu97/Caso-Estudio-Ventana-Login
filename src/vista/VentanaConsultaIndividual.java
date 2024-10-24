@@ -241,14 +241,22 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
                     case "Administrador":
                         comboUsuarios.setVisible(true);
                         labelTipo.setVisible(true);
+                        btonActualizar.setEnabled(true);
+                        btonEliminar.setEnabled(true);
                         break;
                     case "Usuario":
                         comboUsuarios.setVisible(false);
                         labelTipo.setVisible(false);
+                        btonEliminar.setEnabled(false);
+                        btonActualizar.setEnabled(true);
+
+
                         break;
                     case "Secretaria":
                         comboUsuarios.setVisible(false);
                         labelTipo.setVisible(false);
+                        btonActualizar.setEnabled(false);
+                        btonEliminar.setEnabled(false);
                         break;
                     default:
 
@@ -435,7 +443,7 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
                 } else {
                     if (actualiza.getMensaje().equals("mas_datos")) {
                         JOptionPane.showMessageDialog(null, "Debe Ingresar los campos obligatorios", "Faltan Datos", JOptionPane.WARNING_MESSAGE);
-                    } else {
+                    } else if(actualiza.getMensaje().equals("no modifica")){
                         JOptionPane.showMessageDialog(null, "Error al Modificar", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }

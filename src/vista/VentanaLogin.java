@@ -168,6 +168,7 @@ public class VentanaLogin extends JDialog implements ActionListener{
             String mensaje = resp.getMensaje();
 
             if (mensaje == null) {
+                System.out.println("funciona");
                 miCoordinador.asignarPrivilegios(resp);
                 return;
             }

@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import controlador.Coordinador;
 import modelo.vo.UsuarioVo;
 
+
 /**
  *
  * @author User
@@ -157,6 +158,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
                     case "Secretaria":
                         botonConsultar.setVisible(true);
                         botonRegistrar.setVisible(true);
+                         // No puede actualizar perfil
                         break;
                     default:
 

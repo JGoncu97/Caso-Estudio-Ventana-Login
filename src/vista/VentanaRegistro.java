@@ -196,10 +196,13 @@ public class VentanaRegistro extends JDialog implements ActionListener {
     }
 
     private void registrar() {
+
         Integer edad = miCoordinador.validarEdad(campoEdad.getText().trim());
 
         if (edad != null) {
             UsuarioVo miUsuarioVo = new UsuarioVo();
+            miUsuarioVo.setUsername(campoUsername.getText().trim());
+            miUsuarioVo.setPassword(campoPassword.getText().trim());
             miUsuarioVo.setDocumento(campoDocumento.getText().trim());
             miUsuarioVo.setNombre(campoNombre.getText().trim());
             miUsuarioVo.setEdad(edad);
@@ -207,11 +210,9 @@ public class VentanaRegistro extends JDialog implements ActionListener {
             miUsuarioVo.setDireccion(campoDireccion.getText().trim()); // Asignación de la dirección
             miUsuarioVo.setTelefono(campoTelefono.getText().trim());
 
-            String username = campoUsername.getText().trim();
-            String password = campoPassword.getText().trim();
 
 
-            String rol = (String) comboTipo.getSelectedItem();
+            String rol =comboTipo.getSelectedItem().toString();
 
             if (!rol.equals("Seleccione")) {
                 miUsuarioVo.setRol(rol); // Asegúrate de que UsuarioVo tiene un método setRol
@@ -219,15 +220,6 @@ public class VentanaRegistro extends JDialog implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de usuario", "Advertencia", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
-
-            if (username.isEmpty() || password.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Los campos 'username' y 'contraseña' son obligatorios", "Advertencia", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            miUsuarioVo.setUsername(username);
-            miUsuarioVo.setPassword(password);
 
             String retorno = "";
             if (miCoordinador.validarCampos(miUsuarioVo)) {

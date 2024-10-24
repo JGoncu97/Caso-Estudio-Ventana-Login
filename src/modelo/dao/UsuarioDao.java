@@ -53,7 +53,7 @@ public class UsuarioDao {
 			preStatement.setString(7, miUsuarioVo.getDireccion());
 			preStatement.setString(8, miUsuarioVo.getTelefono());
 			preStatement.setInt(9, miUsuarioVo.getTipo());
-			preStatement.setInt(10, 1);
+			preStatement.setInt(10, miUsuarioVo.getEstado());
 
 			// Convertir el rol en número antes de registrarlo
 			int tipoUsuario = 0;
@@ -68,7 +68,7 @@ public class UsuarioDao {
 			}
 
 			preStatement.setInt(9, tipoUsuario);
-			preStatement.setInt(10, 1); // Estado por defecto
+
 
 			preStatement.execute();
 
@@ -215,7 +215,8 @@ public class UsuarioDao {
 			} else {
 
 				if (!usuarioActual.getDocumento().equals(miUsuarioVo.getDocumento())) {
-					resultado.setMensaje("error: no tienes permiso para actualizar los datos de otro usuario");
+					resultado.setMensaje("no modifica");
+					JOptionPane.showMessageDialog(null,"No puedes modificar un usuario que no seas tu");
 				}
 				consulta = "UPDATE usuario SET documento= ?, nombre = ?, profesion=?, edad=?, direccion=?, telefono=? WHERE documento= ?";
 				preStatement = connection.prepareStatement(consulta);
