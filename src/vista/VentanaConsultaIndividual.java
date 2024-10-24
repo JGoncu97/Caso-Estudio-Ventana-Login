@@ -245,10 +245,13 @@ public class VentanaConsultaIndividual extends JDialog implements ActionListener
 	                case "Usuario":
 	                	comboUsuarios.setVisible(false);
 	        			labelTipo.setVisible(false);
+	        			btonEliminar.setEnabled(false);
 	                    break;
 	                case "Secretaria":
 	                	comboUsuarios.setVisible(false);
 	        			labelTipo.setVisible(false);
+	        			btonEliminar.setVisible(false);
+	        			btonActualizar.setVisible(false);
 	        			break;
 	                default:
 	               
