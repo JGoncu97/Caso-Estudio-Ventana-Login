@@ -3,12 +3,16 @@ package controlador;
 import java.util.List;
 
 import modelo.Logica;
+import modelo.dao.ProductoDao;
 import modelo.dao.UsuarioDao;
+import modelo.vo.ProductoVo;
 import modelo.vo.UsuarioVo;
 import vista.VentanaConsultaIndividual;
+import vista.VentanaConsultaProducto;
 import vista.VentanaLogin;
 import vista.VentanaPrincipal;
 import vista.VentanaRegistro;
+import vista.VentanaRegistroProducto;
 
 public class Coordinador {
 
@@ -20,6 +24,9 @@ public class Coordinador {
 	private UsuarioDao miUsuarioDao;
 	
 	private UsuarioVo usuarioActual;
+	private VentanaRegistroProducto miVentanaRegistroProducto;
+	private ProductoDao miProductoDao;
+	private VentanaConsultaProducto miVentanaConsultaProducto;
 
 	public void setVentanaPrincipal(VentanaPrincipal miVentana) {
 		this.miVentana=miVentana;
@@ -63,6 +70,14 @@ public class Coordinador {
 
 	public void mostrarVentanaRegistro() {
 		miVentanaRegistro.setVisible(true);
+	}
+	
+	public void setVentanaRegistroProducto(VentanaRegistroProducto miVentanaRegistroProducto) {
+		this.miVentanaRegistroProducto = miVentanaRegistroProducto;	
+	}
+	
+	public void mostrarVentanaRegistroProducto() {
+		miVentanaRegistroProducto.setVisible(true);		
 	}
 
 	public void mostrarVentanaConsulta() {
@@ -116,6 +131,35 @@ public class Coordinador {
 
 	public List<UsuarioVo> consultarTodosLosUsuarios(UsuarioVo usuarioActual) {
 		return miUsuarioDao.obtenerTodosLosUsuarios(usuarioActual);
+	}
+
+	public void setProductoDao(ProductoDao miProductoDao) {
+		this.miProductoDao = miProductoDao;
+		
+	}
+
+	public String registrarProducto(ProductoVo miProductoVo) {
+		return miProductoDao.registrarProducto(miProductoVo);
+	}
+
+	public void setVentanaConsultaproducto(VentanaConsultaProducto miVentanaConsultaProducto) {
+		this.miVentanaConsultaProducto = miVentanaConsultaProducto;		
+	}
+
+	public void mostrarVentanaConsultaProducto() {
+		miVentanaConsultaProducto.setVisible(true);		
+	}
+
+	public ProductoVo consultarProducto(String idProducto) {
+		return miProductoDao.consultarProducto(idProducto);
+	}
+
+	public List<ProductoVo> consultarProductos() {
+		return miProductoDao.consultarProductos();
+	}
+	
+	public String actualizarProducto(ProductoVo miProductoVo) {
+		return miProductoDao.actualizarProducto(miProductoVo);
 	}
 	
 }
