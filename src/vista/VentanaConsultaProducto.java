@@ -30,7 +30,6 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
     private JButton btonCancelar,btonConsultar,btonActualizar,btonEliminar,btonConsultarList;
     private JTextField campoConsultarIdProducto, campoIdProducto, campoCantidad, campoNombre, campoPrecio;
     private javax.swing.JPanel panelConsulta;
-    private Map<String, Integer> tipoUsuariosMap;
     private javax.swing.JSeparator separadorInferior,separadorSuperior;
     
     private javax.swing.JTable tablaProductos;
@@ -211,6 +210,7 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 		if (e.getSource()==btonEliminar) {
 			eliminarProducto();
 		}
+		
 		if (e.getSource() == btonConsultarList) {
 			consultarListaproductos();
 		}
@@ -341,9 +341,5 @@ public class VentanaConsultaProducto extends JDialog implements ActionListener{
 			
 		}
 	}
-	
-	
-	
-	
-	
+		
 }

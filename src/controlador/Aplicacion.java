@@ -1,5 +1,6 @@
 package controlador;
 import modelo.Logica;
+import modelo.dao.CompraDao;
 import modelo.dao.ProductoDao;
 import modelo.dao.UsuarioDao;
 import vista.VentanaConsultaIndividual;
@@ -24,6 +25,7 @@ public class Aplicacion {
 		VentanaRegistroProducto miVentanaRegistroProducto = new VentanaRegistroProducto(miVentana, true);
 		ProductoDao miProductoDao = new ProductoDao();
 		VentanaConsultaProducto miVentanaConsultaProducto = new VentanaConsultaProducto(miVentana, true);
+		CompraDao miCompraDao = new CompraDao();
 		
 		
 		//Relacionamos las clases con el coordinador				
@@ -36,6 +38,7 @@ public class Aplicacion {
 		miVentanaRegistroProducto.setCoordinador(miCoordinador);
 		miProductoDao.setCoordinador(miCoordinador);
 		miVentanaConsultaProducto.setCoordinador(miCoordinador);
+		miCompraDao.setCoordinador(miCoordinador);
 		
 		//Relacionamos el Coordinador con las Clases
 		miCoordinador.setVentanaPrincipal(miVentana);
@@ -47,6 +50,7 @@ public class Aplicacion {
 		miCoordinador.setVentanaRegistroProducto(miVentanaRegistroProducto);
 		miCoordinador.setProductoDao(miProductoDao);
 		miCoordinador.setVentanaConsultaproducto(miVentanaConsultaProducto);
+		miCoordinador.setCompraDao(miCompraDao);
 		
 		miLogin.setVisible(true);
 	}

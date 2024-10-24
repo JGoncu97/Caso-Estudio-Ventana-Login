@@ -3,6 +3,7 @@ package controlador;
 import java.util.List;
 
 import modelo.Logica;
+import modelo.dao.CompraDao;
 import modelo.dao.ProductoDao;
 import modelo.dao.UsuarioDao;
 import modelo.vo.ProductoVo;
@@ -27,6 +28,7 @@ public class Coordinador {
 	private VentanaRegistroProducto miVentanaRegistroProducto;
 	private ProductoDao miProductoDao;
 	private VentanaConsultaProducto miVentanaConsultaProducto;
+	private CompraDao miCompraDao;
 
 	public void setVentanaPrincipal(VentanaPrincipal miVentana) {
 		this.miVentana=miVentana;
@@ -164,6 +166,11 @@ public class Coordinador {
 	
 	public String eliminarProducto(String idProducto) {
 		return miProductoDao.eliminarProducto(idProducto);
+	}
+
+	public void setCompraDao(CompraDao miCompraDao) {
+		this.miCompraDao = miCompraDao;
+		
 	}
 	
 }
