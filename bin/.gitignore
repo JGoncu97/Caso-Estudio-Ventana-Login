@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-/modelo/
 /controlador/
-=======
+/modelo/
+/out/
 /vista/
-/controlador/
-/modelo/
->>>>>>> Jose-G
-/scriptbd/

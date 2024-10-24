@@ -1,4 +1,5 @@
 package controlador;
+import java.util.List;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Coordinador {
 	
 	private UsuarioVo usuarioActual;
 
+
 	public void setVentanaPrincipal(VentanaPrincipal miVentana) {
 		this.miVentana=miVentana;
 	}
@@ -32,9 +34,11 @@ public class Coordinador {
 	public void setLogica(Logica miLogica) {
 		this.miLogica=miLogica;
 	}
-	
+
+
 	//Modificacion para recibir un nombre de usuario
-	public UsuarioVo validarIngreso(int index,String user ,String pass) {		
+	public UsuarioVo validarIngreso(int index,String user ,String pass) {
+
 		return miLogica.validarIngreso(index,user,pass);
 	}
 
@@ -45,7 +49,7 @@ public class Coordinador {
 	public void asignarPrivilegios(UsuarioVo usuario) {
 		miVentana.asignarPrivilegios(usuario);
 		miVentanaConsultaIndividual.asignarPrivilegios(usuario);
-		
+
 	}
 
 	public void mostrarLogin() {
@@ -85,10 +89,12 @@ public class Coordinador {
 		// TODO Auto-generated method stub
 		return miLogica.validarEdad(edadIngresada);
 	}
-		
+
+
 	//Modificamos el argumento para enviar la password
 	public UsuarioVo consultarUsuario(String user, String pass) {
-		
+
+
 		return miUsuarioDao.consultarUsuario(user,pass);
 	}
 
@@ -103,12 +109,14 @@ public class Coordinador {
 	public void abrirVentanaPrincipal(UsuarioVo miUsuarioVo) {
 		this.usuarioActual = miUsuarioVo;
 		miVentana.setVisible(true);
+
 		
 	}
 	
 	 public UsuarioVo obtenerUsuarioActual() {
 	        return usuarioActual;
 	    }
+
 
 	public UsuarioVo consultarUsuarioDoc(String doc) {
 		return miUsuarioDao.consultarUsuarioDoc(doc);
@@ -117,5 +125,18 @@ public class Coordinador {
 	public List<UsuarioVo> consultarTodosLosUsuarios(UsuarioVo usuarioActual) {
 		return miUsuarioDao.obtenerTodosLosUsuarios(usuarioActual);
 	}
-	
+
+
+
+	// Método para establecer el usuario actual al iniciar sesión
+	public void setUsuarioActual(UsuarioVo usuario) {
+		this.usuarioActual = usuario;
+	}
+
+	// Método para obtener el usuario actual
+	public UsuarioVo getUsuarioActual() {
+		return usuarioActual;
+	}
+
 }
+
