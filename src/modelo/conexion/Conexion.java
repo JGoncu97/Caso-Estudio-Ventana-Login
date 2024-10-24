@@ -6,8 +6,6 @@ import java.sql.*;
 import java.util.Properties;
 import java.io.FileInputStream;
 
-import javax.swing.JOptionPane;
-
 
 
 public class Conexion {
@@ -60,7 +58,7 @@ public class Conexion {
 					new FileInputStream("C:\\Users\\SENA\\Desktop\\019\\Caso-Estudio-Ventana-Login\\properties\\credenciales.properties"));*/
 			
 			propiedades.load(
-					new FileInputStream("E:\\5to trismestre\\Cristian\\CasoEstudio\\Caso de Estudio\\VentanaLogin\\properties\\credenciales.properties"));
+					new FileInputStream("properties/credenciales.properties"));
 			
 			
 			nombreBd=propiedades.getProperty("db.nombreBd");

@@ -19,7 +19,7 @@ public class ProductoDao {
 		String resultado = "";
 		
 		Connection connection = null;
-		Conexion conexion = new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement = null;
 		
 		connection = conexion.getConnection();
@@ -56,7 +56,7 @@ public class ProductoDao {
 	
 	public ProductoVo consultarProducto(String idProducto) {
 		Connection connection = null;
-		Conexion conexion = new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement = null;
 		ResultSet result = null;
 		ProductoVo miProductoVo = null;
@@ -105,7 +105,7 @@ public class ProductoDao {
 		List<ProductoVo> miListaProductos = new ArrayList<ProductoVo>();
 		
 		Connection connection = null;
-		Conexion conexion = new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement = null;
 		ResultSet result = null;
 		
@@ -156,7 +156,7 @@ public class ProductoDao {
 		String idProducto = miProductoVo.getIdProducto();
 		
 		Connection connection = null;
-		Conexion conexion = new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement = null;
 		ResultSet result = null;
 		
@@ -212,7 +212,7 @@ public class ProductoDao {
 		String resultado = "";
 		
 		Connection connection = null;
-		Conexion conexion = new Conexion();
+		Conexion conexion=Conexion.getInstancia();
 		PreparedStatement preStatement = null;
 		ResultSet result = null;
 		
